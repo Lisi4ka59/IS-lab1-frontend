@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import HomePage from "./home/HomePage.tsx";
 import AuthPage from "./auth/AuthPage.tsx";
 import ActivationPage from "./auth/ActivationPage.tsx";
@@ -11,11 +11,13 @@ const theme = createTheme({
     },
 });
 
+
 const App: React.FC = () => {
     return (
         <ThemeProvider theme={theme}>
             <Router>
                 <Routes>
+                    <Route path="/" element={<HomePage />} />
                     <Route path="/auth" element={<AuthPage/>} />
                     <Route path="/home" element={<HomePage />} />
                     <Route path="/activate" element={<ActivationPage />} />

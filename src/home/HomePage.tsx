@@ -13,7 +13,7 @@ const HomePage: React.FC = () => {
             setUser(JSON.parse(savedUser)); // Преобразуем строку JSON в объект
         } else {
             // Если нет данных о пользователе, редиректим на страницу логина
-            navigate('/login');
+            navigate('/auth');
         }
     }, [navigate]);
 

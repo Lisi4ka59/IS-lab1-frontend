@@ -19,4 +19,19 @@ api.interceptors.request.use((config) => {
     return Promise.reject(error);
 });
 
+api.interceptors.response.use(
+    (response) => {
+        return response; // Если ответ успешный, возвращаем его как есть
+    },
+    (error) => {
+        if (error.response && error.response.status === 403) {
+            // Если статус 401 (Unauthorized), очищаем токен и редиректим на страницу авторизации
+            localStorage.removeItem('token');
+            localStorage.removeItem('user'); // Если вы храните пользователя, очищаем данные
+            window.location.href = '/auth'; // Редирект на страницу авторизации
+        }
+        return Promise.reject(error); // Прокидываем ошибку дальше
+    }
+);
+
 export default api;
