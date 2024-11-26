@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import api from '../api.ts';
+import InputMask from 'react-input-mask';
 import {
     Box,
     TextField,
@@ -11,8 +12,9 @@ import {
     IconButton,
     InputAdornment,
 } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import {Visibility, VisibilityOff} from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import {HttpStatusCode} from "axios";
 
 const RegistrationForm: React.FC = () => {
     useNavigate();
@@ -45,6 +47,14 @@ const RegistrationForm: React.FC = () => {
                     : ''
             );
         }
+        if (name === 'password') {
+            if (formData.password.length < 8) {
+                setPasswordError('Пароль должен быть не менее 8 символов');
+                return;
+            }
+        }
+
+
     };
 
     const handlePasswordVisibilityToggle = () => {
@@ -57,10 +67,21 @@ const RegistrationForm: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (formData.username.includes('@')) {
+            setErrorMessage('Имя пользователя не должно содержать символ "@".');
+            return;
+        }
+        if (formData.password.length < 8) {
+            setPasswordError('Пароль должен быть не менее 8 символов');
+            return;
+        }
         if (formData.password !== formData.confirmPassword) {
             setPasswordError('Пароли не совпадают');
             return;
         }
+
+
+
         setLoading(true);
         setErrorMessage('');
         try {
@@ -69,9 +90,14 @@ const RegistrationForm: React.FC = () => {
                 `Регистрация успешна! Мы отправили письмо для активации на адрес ${formData.email}.`
             );
         } catch (error: any) {
-            setErrorMessage(
-                error.response?.data?.message || 'Произошла ошибка при регистрации.'
-            );
+            if (error.response?.status === HttpStatusCode.Conflict) {
+                setErrorMessage(error.response?.data?.error);
+            } else {
+                setErrorMessage(
+                    error.response?.data?.message || 'Произошла ошибка при регистрации.'
+                );
+            }
+
         } finally {
             setLoading(false);
         }
@@ -89,15 +115,13 @@ const RegistrationForm: React.FC = () => {
                 mx: 'auto',
                 mt: 4,
                 p: 3,
-                borderRadius: 2,
-                boxShadow: 3,
                 textAlign: 'center',
             }}
         >
             <Typography variant="h4" align="center" gutterBottom>
                 Регистрация
             </Typography>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} >
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <TextField
@@ -107,6 +131,7 @@ const RegistrationForm: React.FC = () => {
                             onChange={handleChange}
                             fullWidth
                             required
+                            autoComplete="off"
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -129,6 +154,7 @@ const RegistrationForm: React.FC = () => {
                             fullWidth
                             required
                             type={passwordVisible ? 'text' : 'password'}
+                            autoComplete="new-password"
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
@@ -154,6 +180,8 @@ const RegistrationForm: React.FC = () => {
                             type={confirmPasswordVisible ? 'text' : 'password'}
                             error={!!passwordError}
                             helperText={passwordError}
+                            autoComplete="new-password"
+                            onPaste={(e) => e.preventDefault()}
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
@@ -193,14 +221,22 @@ const RegistrationForm: React.FC = () => {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <TextField
-                            label="Телефон"
-                            name="phoneNumber"
+                        <InputMask
+                            mask="+7(999)999-99-99"
                             value={formData.phoneNumber}
                             onChange={handleChange}
-                            fullWidth
-                            type="tel"
-                        />
+                            name="phoneNumber"
+                            maskChar="_"
+                        >
+                            {(inputProps: any) => (
+                                <TextField
+                                    {...inputProps}
+                                    label="Номер телефона"
+                                    fullWidth
+                                    error={!!errorMessage}
+                                />
+                            )}
+                        </InputMask>
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
