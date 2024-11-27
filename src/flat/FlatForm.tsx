@@ -1,5 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Box, TextField, Button, CircularProgress, MenuItem, Select, InputLabel, FormControl, Dialog, DialogActions, DialogContent, DialogTitle, Alert, Checkbox, FormControlLabel } from "@mui/material";
+import {
+    Box,
+    TextField,
+    Button,
+    CircularProgress,
+    MenuItem,
+    Select,
+    InputLabel,
+    FormControl,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Alert,
+    FormControlLabel,
+    Typography, Switch
+} from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import api from "../api"; // Замените на свой API
@@ -17,9 +33,8 @@ enum Furnish {
 
 enum View {
     PARK = "PARK",
-    SEA = "SEA",
-    STREET = "STREET",
-    MOUNTAINS = "MOUNTAINS"
+    YARD = "YARD",
+    STREET = "STREET"
 }
 
 const FlatForm: React.FC = () => {
@@ -147,7 +162,9 @@ const FlatForm: React.FC = () => {
                 margin: "0 auto",
             }}
         >
-            <h3>Создать квартиру</h3>
+            <Typography variant="h4" align="center" gutterBottom>
+                Создать квартиру
+            </Typography>
 
             {successMessage && <Alert severity="success">{successMessage}</Alert>}
             {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
@@ -220,7 +237,12 @@ const FlatForm: React.FC = () => {
             </Button>
 
             <FormControlLabel
-                control={<Checkbox {...formik.getFieldProps("balcony")} />}
+                control={
+                    <Switch
+                        {...formik.getFieldProps("balcony")}
+                        name="isBalcony"
+                    />
+                }
                 label="Балкон"
             />
 
@@ -241,16 +263,22 @@ const FlatForm: React.FC = () => {
             />
 
             <FormControlLabel
-                control={<Checkbox {...formik.getFieldProps("isNew")} />}
-                label="Новая квартира"
+                control={
+                    <Switch
+                        {...formik.getFieldProps("isNew")}
+                        name="isNew"
+                    />
+                }
+                label="Новостройка"
             />
+
 
             <FormControl fullWidth>
                 <InputLabel>Степень меблировки</InputLabel>
                 <Select
                     value={formik.values.furnish}
                     onChange={(e) => formik.setFieldValue("furnish", e.target.value)}
-                    label="Степень меблировки"
+                    label="Стиль мебели"
                 >
                     {Object.values(Furnish).map((furnishOption) => (
                         <MenuItem key={furnishOption} value={furnishOption}>

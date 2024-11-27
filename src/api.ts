@@ -16,6 +16,7 @@ api.interceptors.request.use((config) => {
     }
     return config;
 }, (error: any) => {
+
     return Promise.reject(error);
 });
 
@@ -24,7 +25,7 @@ api.interceptors.response.use(
         return response; // Если ответ успешный, возвращаем его как есть
     },
     (error) => {
-        if (error.response && error.response.status === 403) {
+        if (error.response.status === 403) {
             // Если статус 403, очищаем токен и редиректим на страницу авторизации
             localStorage.removeItem('token');
             localStorage.removeItem('user'); // Если вы храните пользователя, очищаем данные
