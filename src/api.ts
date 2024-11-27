@@ -25,7 +25,7 @@ api.interceptors.response.use(
     },
     (error) => {
         if (error.response && error.response.status === 403) {
-            // Если статус 401 (Unauthorized), очищаем токен и редиректим на страницу авторизации
+            // Если статус 403, очищаем токен и редиректим на страницу авторизации
             localStorage.removeItem('token');
             localStorage.removeItem('user'); // Если вы храните пользователя, очищаем данные
             window.location.href = '/auth'; // Редирект на страницу авторизации

@@ -4,6 +4,9 @@ import HomePage from "./home/HomePage.tsx";
 import AuthPage from "./auth/AuthPage.tsx";
 import ActivationPage from "./auth/ActivationPage.tsx";
 import {createTheme, ThemeProvider} from "@mui/material";
+import FlatForm from "./flat/FlatForm.tsx";
+import CoordinatesForm from "./flat/CoordinatesForm.tsx";
+import HouseForm from "./flat/HouseForm.tsx";
 
 const theme = createTheme({
     palette: {
@@ -21,6 +24,15 @@ const App: React.FC = () => {
                     <Route path="/auth" element={<AuthPage/>} />
                     <Route path="/home" element={<HomePage />} />
                     <Route path="/activate" element={<ActivationPage />} />
+                    <Route path="/flat/create" element={<FlatForm />} />
+
+
+
+                    <Route path="/flat/cr" element={<CoordinatesForm />} />
+                    <Route path="/flat/c" element={<HouseForm />} />
+
+
+
 
                     {/* Добавьте другие маршруты, если нужно */}
                 </Routes>
