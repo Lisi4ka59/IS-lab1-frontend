@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
     Box,
     Grid,
@@ -28,6 +28,7 @@ interface Flat {
         year: number;
         numberOfFlatsOnFloor: number;
     };
+    ownerId: number;
 }
 
 const PaginatedFlatList: React.FC = () => {
@@ -68,30 +69,30 @@ const PaginatedFlatList: React.FC = () => {
 
     if (loading) {
         return (
-            <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
-                <CircularProgress />
+            <Box sx={{display: "flex", justifyContent: "center", marginTop: 4}}>
+                <CircularProgress/>
             </Box>
         );
     }
 
     if (error) {
         return (
-            <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
+            <Box sx={{display: "flex", justifyContent: "center", marginTop: 4}}>
                 <Alert severity="error">{error}</Alert>
             </Box>
         );
     }
 
     return (
-        <Box sx={{ padding: 2 }}>
+        <Box sx={{padding: 2}}>
             <Grid container spacing={2}>
                 {displayedFlats.map((flat) => (
                     <Grid item xs={12} sm={6} md={4} key={flat.id}>
-                        <FlatCard flat={flat} />
+                        <FlatCard flat={flat}/>
                     </Grid>
                 ))}
             </Grid>
-            <Box sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}>
+            <Box sx={{display: "flex", justifyContent: "center", marginTop: 2}}>
                 <Pagination
                     count={Math.ceil(flats.length / itemsPerPage)}
                     page={page}
