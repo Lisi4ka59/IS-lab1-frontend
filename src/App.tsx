@@ -6,6 +6,8 @@ import ActivationPage from "./auth/ActivationPage.tsx";
 import {createTheme, ThemeProvider} from "@mui/material";
 import FlatForm from "./flat/FlatForm.tsx";
 import PaginatedFlatList from "./flat/FlatList.tsx";
+import Layout from './Layout';
+import UserProfile from "./user/UserProfile.tsx"; // Импорт Layout-компонента
 
 
 const theme = createTheme({
@@ -19,22 +21,25 @@ const App: React.FC = () => {
     return (
         <ThemeProvider theme={theme}>
             <Router>
-                <Routes>
-                    <Route path="/" element={<HomePage/>}/>
-                    <Route path="/auth" element={<AuthPage/>}/>
-                    <Route path="/home" element={<HomePage/>}/>
-                    <Route path="/activate" element={<ActivationPage/>}/>
-                    <Route path="/flat/create" element={<FlatForm/>}/>
-
-
-                    <Route path="/flat/all" element={<PaginatedFlatList/>}/>
-
-                    <Route path="*" element={<Navigate to="/" />} />
+                <Layout>
+                    <Routes>
+                        <Route path="/" element={<HomePage/>}/>
+                        <Route path="/auth" element={<AuthPage/>}/>
+                        <Route path="/home" element={<HomePage/>}/>
+                        <Route path="/activate" element={<ActivationPage/>}/>
+                        <Route path="/flat/create" element={<FlatForm/>}/>
+                        <Route path="/profile" element={<UserProfile/>}/>
 
 
 
-                    {/* Добавьте другие маршруты, если нужно */}
-                </Routes>
+                        <Route path="/flat/all" element={<PaginatedFlatList/>}/>
+
+                        <Route path="*" element={<Navigate to="/"/>}/>
+
+
+                        {/* Добавьте другие маршруты, если нужно */}
+                    </Routes>
+                </Layout>
             </Router>
         </ThemeProvider>
 

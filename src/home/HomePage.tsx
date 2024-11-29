@@ -24,6 +24,7 @@ const HomePage: React.FC = () => {
     };
 
     return (
+
         <Box sx={{ maxWidth: 800, mx: 'auto', mt: 4, p: 3 }}>
             <Typography variant="h4" align="center" gutterBottom>
                 Добро пожаловать на домашнюю страницу
