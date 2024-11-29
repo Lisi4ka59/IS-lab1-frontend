@@ -14,7 +14,7 @@ import {
     Switch,
     FormControlLabel,
     Select,
-    MenuItem,
+    MenuItem, SelectChangeEvent
 } from "@mui/material";
 import {Edit, Delete, Save, Cancel} from "@mui/icons-material";
 import api from "../api";
@@ -49,9 +49,10 @@ interface Flat {
 }
 
 
-const FlatCard: React.FC<{ flat: Flat; onDelete: (id: number) => void }> = ({
-                                                                                flat,
-                                                                            }) => {
+const FlatCard: React.FC<{ flat: Flat; canEdite: boolean }> = ({
+                                                                   flat,
+                                                                   canEdite
+                                                               }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editedFlat, setEditedFlat] = useState(flat);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -77,9 +78,7 @@ const FlatCard: React.FC<{ flat: Flat; onDelete: (id: number) => void }> = ({
         }));
     };
 
-    const handleSelectChange = (
-        event: React.ChangeEvent<{ name?: string; value: unknown }>
-    ) => {
+    const handleSelectChange = (event: SelectChangeEvent<string>) => {
         const {name, value} = event.target;
         setEditedFlat((prev) => ({
             ...prev,
@@ -114,33 +113,35 @@ const FlatCard: React.FC<{ flat: Flat; onDelete: (id: number) => void }> = ({
 
 
     return (
-        <Card sx={{maxWidth: 600, margin: "auto", position: "relative"}}>
+        <Card sx={{maxWidth: 600, minWidth: 200, margin: "auto", position: "relative"}}>
             {/* Кнопки редактирования и удаления */}
-            <Box sx={{position: "absolute", top: 8, right: 8, display: "flex"}}>
-                {!isDeleted && (
-                    <>
-                        {!isEditing && (
-                            <>
-                                <IconButton
-                                    aria-label="edit"
-                                    onClick={() => setIsEditing(true)}
-                                    size="small"
-                                >
-                                    <Edit/>
-                                </IconButton>
-                                <IconButton
-                                    aria-label="delete"
-                                    onClick={() => setIsDeleteDialogOpen(true)}
-                                    size="small"
-                                >
-                                    <Delete/>
-                                </IconButton>
-                            </>
-                        )}
-                    </>
-                )}
+            {canEdite && (
+                <Box sx={{position: "absolute", top: 8, right: 8, display: "flex"}}>
+                    {!isDeleted && (
+                        <>
+                            {!isEditing && (
+                                <>
+                                    <IconButton
+                                        aria-label="edit"
+                                        onClick={() => setIsEditing(true)}
+                                        size="small"
+                                    >
+                                        <Edit/>
+                                    </IconButton>
+                                    <IconButton
+                                        aria-label="delete"
+                                        onClick={() => setIsDeleteDialogOpen(true)}
+                                        size="small"
+                                    >
+                                        <Delete/>
+                                    </IconButton>
+                                </>
+                            )}
+                        </>
+                    )}
 
-            </Box>
+                </Box>
+            )}
 
             <CardContent>
                 {isDeleted ? (
@@ -222,27 +223,37 @@ const FlatCard: React.FC<{ flat: Flat; onDelete: (id: number) => void }> = ({
                                     }
                                     label="Новостройка"
                                 />
-                                <Select
-                                    name="furnish"
-                                    value={editedFlat.furnish}
-                                    onChange={handleSelectChange}
-                                    fullWidth
-                                    displayEmpty
-                                >
-                                    <MenuItem value="DESIGNER">Дизайнерская</MenuItem>
-                                    <MenuItem value="NONE">Без отделки</MenuItem>
-                                    <MenuItem value="FINE">Хорошая</MenuItem>
-                                    <MenuItem value="BAD">Плохая</MenuItem>
-                                    <MenuItem value="LITTLE">Небольшая</MenuItem>
-                                </Select>
-                                <TextField
-                                    label="Вид"
-                                    name="view"
-                                    value={editedFlat.view}
-                                    onChange={handleChange}
-                                    fullWidth
-                                    margin="normal"
-                                />
+                                <Box mt={2}>
+                                    <Select
+                                        name="furnish"
+                                        value={editedFlat.furnish}
+                                        onChange={handleSelectChange}
+                                        fullWidth
+                                        displayEmpty
+                                    >
+                                        <MenuItem value="DESIGNER">Дизайнерская</MenuItem>
+                                        <MenuItem value="NONE">Без отделки</MenuItem>
+                                        <MenuItem value="FINE">Хорошая</MenuItem>
+                                        <MenuItem value="BAD">Плохая</MenuItem>
+                                        <MenuItem value="LITTLE">Небольшая</MenuItem>
+                                    </Select>
+                                </Box>
+
+                                <Box mt={3}>
+                                    <Select
+                                        name="view"
+                                        value={editedFlat.view}
+                                        onChange={handleSelectChange}
+                                        fullWidth
+                                        displayEmpty
+
+                                    >
+                                        <MenuItem value="STREET">Улица</MenuItem>
+                                        <MenuItem value="YARD">Двор</MenuItem>
+                                        <MenuItem value="PARK">Парк</MenuItem>
+                                    </Select>
+                                </Box>
+
                                 <Divider sx={{marginY: 2}}/>
                                 <Typography variant="h6">Координаты</Typography>
                                 <TextField
@@ -325,7 +336,7 @@ const FlatCard: React.FC<{ flat: Flat; onDelete: (id: number) => void }> = ({
                                     type="number"
                                     fullWidth
                                 />
-                                <Box sx={{display: "flex", justifyContent: "space-between"}}>
+                                <Box sx={{display: "flex", justifyContent: "space-between", gap: 1}}>
                                     <Button
                                         startIcon={<Save/>}
                                         onClick={handleSave}
@@ -366,7 +377,7 @@ const FlatCard: React.FC<{ flat: Flat; onDelete: (id: number) => void }> = ({
                                     <strong>Балкон:</strong> {currentFlat.balcony ? "Есть" : "Нет"}
                                 </Typography>
                                 <Typography variant="body1">
-                                    <strong>Время до метро пешком:</strong> {currentFlat.timeToMetroOnFoot} мин
+                                    <strong>До метро пешком:</strong> {currentFlat.timeToMetroOnFoot} мин
                                 </Typography>
                                 <Typography variant="body1">
                                     <strong>Количество комнат:</strong> {currentFlat.numberOfRooms}

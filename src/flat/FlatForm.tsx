@@ -21,6 +21,8 @@ import * as Yup from "yup";
 import api from "../api"; // Замените на свой API
 import HouseForm from "./HouseForm"; // Импорт компонента для создания дома
 import CoordinatesForm from "./CoordinatesForm"; // Импорт компонента для создания координат
+import { useNavigate } from 'react-router-dom';
+
 
 // Типы для перечислений
 enum Furnish {
@@ -38,6 +40,7 @@ enum View {
 }
 
 const FlatForm: React.FC = () => {
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
@@ -115,6 +118,7 @@ const FlatForm: React.FC = () => {
                 setSuccessMessage("Квартира успешно создана.");
                 setErrorMessage("");
                 formik.resetForm();
+                navigate("/");
             } catch (error) {
                 setSuccessMessage("");
                 setErrorMessage("Произошла ошибка при создании квартиры.");

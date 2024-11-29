@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import api from "../api";
 import FlatCard from "./FlatCard";
+import {useNavigate} from "react-router-dom";
 
 // Тип для описания квартиры
 interface Flat {
@@ -37,6 +38,8 @@ const PaginatedFlatList: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [page, setPage] = useState(1);
     const itemsPerPage = 5;
+    const [user, setUser] = useState<any>(null);
+    const navigate = useNavigate();
 
     // Загрузка списка квартир с сервера
     useEffect(() => {
@@ -45,6 +48,14 @@ const PaginatedFlatList: React.FC = () => {
                 setLoading(true);
                 const response = await api.get("/flats/flat-list");
                 const data = response.data;
+                const savedUser = localStorage.getItem('user');
+                if (savedUser) {
+                    setUser(JSON.parse(savedUser)); // Преобразуем строку JSON в объект
+                } else {
+                    // Если нет данных о пользователе, редиректим на страницу логина
+                    navigate('/auth');
+                }
+
                 setFlats(data.flats || []);
                 setError(null);
             } catch (err: any) {
@@ -55,7 +66,7 @@ const PaginatedFlatList: React.FC = () => {
         };
 
         fetchFlats();
-    }, []);
+    }, [navigate]);
 
     // Рассчитываем отображаемые квартиры
     const displayedFlats = flats.slice(
@@ -87,8 +98,8 @@ const PaginatedFlatList: React.FC = () => {
         <Box sx={{padding: 2}}>
             <Grid container spacing={2}>
                 {displayedFlats.map((flat) => (
-                    <Grid item xs={12} sm={6} md={4} key={flat.id}>
-                        <FlatCard flat={flat}/>
+                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2.4} key={flat.id}>
+                        <FlatCard flat={flat} canEdite={flat.ownerId == user.id || user.role?.some((role: any) => role.name === "ADMIN")}/>
                     </Grid>
                 ))}
             </Grid>
