@@ -76,7 +76,7 @@ const FlatForm: React.FC = () => {
         timeToMetroOnFoot: Yup.number().positive("Время до метро должно быть положительным числом"),
         numberOfRooms: Yup.number().positive("Количество комнат должно быть положительным числом"),
         isNew: Yup.boolean().required("Поле 'новая квартира' обязательно"),
-        furnish: Yup.mixed().oneOf(Object.values(Furnish)).required("Укажите степень меблировки"),
+        furnish: Yup.mixed().oneOf(Object.values(Furnish)).nullable().notRequired(),
         view: Yup.mixed().oneOf(Object.values(View)).required("Укажите вид из окна"),
     });
 
@@ -91,7 +91,7 @@ const FlatForm: React.FC = () => {
             timeToMetroOnFoot: "",
             numberOfRooms: "",
             isNew: false,
-            furnish: Furnish.NONE,
+            furnish: "",
             view: View.STREET,
         },
         validationSchema,
@@ -278,12 +278,15 @@ const FlatForm: React.FC = () => {
 
 
             <FormControl fullWidth>
-                <InputLabel>Степень меблировки</InputLabel>
+                <InputLabel>Стиль мебели</InputLabel>
                 <Select
-                    value={formik.values.furnish}
-                    onChange={(e) => formik.setFieldValue("furnish", e.target.value)}
+                    value={formik.values.furnish ?? null}
+                    onChange={(e) => formik.setFieldValue("furnish", e.target.value || null)}
                     label="Стиль мебели"
                 >
+                    <MenuItem value="">
+                        <em>Не выбрано</em>
+                    </MenuItem>
                     {Object.values(Furnish).map((furnishOption) => (
                         <MenuItem key={furnishOption} value={furnishOption}>
                             {furnishOption}

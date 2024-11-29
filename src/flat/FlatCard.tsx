@@ -82,7 +82,7 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean }> = ({
         const {name, value} = event.target;
         setEditedFlat((prev) => ({
             ...prev,
-            [name || ""]: value,
+            [name || ""]:  value === "" ? null : value,
         }));
     };
 
@@ -231,11 +231,15 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean }> = ({
                                         fullWidth
                                         displayEmpty
                                     >
+                                        <MenuItem value="">
+                                            <em>Не выбрано</em>
+                                        </MenuItem>
                                         <MenuItem value="DESIGNER">Дизайнерская</MenuItem>
                                         <MenuItem value="NONE">Без отделки</MenuItem>
                                         <MenuItem value="FINE">Хорошая</MenuItem>
                                         <MenuItem value="BAD">Плохая</MenuItem>
                                         <MenuItem value="LITTLE">Небольшая</MenuItem>
+
                                     </Select>
                                 </Box>
 
