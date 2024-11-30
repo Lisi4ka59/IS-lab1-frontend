@@ -49,10 +49,7 @@ interface Flat {
 }
 
 
-const FlatCard: React.FC<{ flat: Flat; canEdite: boolean }> = ({
-                                                                   flat,
-                                                                   canEdite
-                                                               }) => {
+const FlatCard: React.FC<{ flat: Flat; canEdite: boolean, canEditeHouse: boolean, canEditeCoordinates:boolean }> = ({flat, canEdite, canEditeHouse, canEditeCoordinates}) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editedFlat, setEditedFlat] = useState(flat);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -276,6 +273,7 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean }> = ({
                                     margin="normal"
                                     type="number"
                                     fullWidth
+                                    disabled={!canEditeCoordinates}
                                 />
                                 <TextField
                                     label="Y"
@@ -293,6 +291,7 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean }> = ({
                                     margin="normal"
                                     type="number"
                                     fullWidth
+                                    disabled={!canEditeCoordinates}
                                 />
                                 <Divider sx={{marginY: 2}}/>
                                 <Typography variant="h6">Информация о доме</Typography>
@@ -308,6 +307,7 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean }> = ({
                                     }
                                     margin="normal"
                                     fullWidth
+                                    disabled={!canEditeHouse}
                                 />
                                 <TextField
                                     label="Год постройки"
@@ -322,6 +322,8 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean }> = ({
                                     margin="normal"
                                     type="number"
                                     fullWidth
+                                    disabled={!canEditeHouse}
+
                                 />
                                 <TextField
                                     label="Квартир на этаже"
@@ -339,6 +341,8 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean }> = ({
                                     margin="normal"
                                     type="number"
                                     fullWidth
+                                    disabled={!canEditeHouse}
+
                                 />
                                 <Box sx={{display: "flex", justifyContent: "space-between", gap: 1}}>
                                     <Button
@@ -371,7 +375,12 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean }> = ({
                                 <Divider sx={{marginBottom: 2}}/>
 
                                 {/* Общая информация */}
-                                <Typography variant="body1">
+
+                                <Typography variant="body1" color="textSecondary">
+                                    <strong>ID:</strong> {currentFlat.id}
+                                </Typography>
+                                <Typography variant="body1" mt={1}>
+
                                     <strong>Площадь:</strong> {currentFlat.area} м²
                                 </Typography>
                                 <Typography variant="body1">

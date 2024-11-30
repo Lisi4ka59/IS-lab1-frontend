@@ -5,9 +5,13 @@ import AuthPage from "./auth/AuthPage.tsx";
 import ActivationPage from "./auth/ActivationPage.tsx";
 import {createTheme, ThemeProvider} from "@mui/material";
 import FlatForm from "./flat/FlatForm.tsx";
-import PaginatedFlatList from "./flat/FlatList.tsx";
 import Layout from './Layout';
-import UserProfile from "./user/UserProfile.tsx"; // Импорт Layout-компонента
+import UserProfile from "./user/UserProfile.tsx";
+import AverageNumberOfRooms from "./advanced-flat/AverageNumberOfRooms.tsx";
+import FlatWithMaxArea from "./advanced-flat/FlatWithMaxArea.tsx";
+import FlatsCountByIsNew from "./advanced-flat/FlatsCountByIsNew.tsx";
+import MostExpensiveFlatWithoutBalcony from "./advanced-flat/MostExpensiveFlatWithoutBalcony.tsx";
+import MostExpensiveFlatFromIds from "./advanced-flat/MostExpensiveFlatFromIds.tsx"; // Импорт Layout-компонента
 
 
 const theme = createTheme({
@@ -29,15 +33,13 @@ const App: React.FC = () => {
                         <Route path="/activate" element={<ActivationPage/>}/>
                         <Route path="/flat/create" element={<FlatForm/>}/>
                         <Route path="/profile" element={<UserProfile/>}/>
-
-
-
-                        <Route path="/flat/all" element={<PaginatedFlatList/>}/>
+                        <Route path="/average-number-of-rooms" element={<AverageNumberOfRooms/>}/>
+                        <Route path="/flat-with-max-area" element={<FlatWithMaxArea/>}/>
+                        <Route path="/flats-count-by-is-new" element={<FlatsCountByIsNew/>}/>
+                        <Route path="/most-expensive-flat-without-balcony" element={<MostExpensiveFlatWithoutBalcony/>}/>
+                        <Route path="/most-expensive-flat-from-ids" element={<MostExpensiveFlatFromIds/>}/>
 
                         <Route path="*" element={<Navigate to="/"/>}/>
-
-
-                        {/* Добавьте другие маршруты, если нужно */}
                     </Routes>
                 </Layout>
             </Router>

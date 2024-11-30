@@ -14,7 +14,7 @@ import {useNavigate} from "react-router-dom";
 interface Flat {
     id: number;
     name: string;
-    coordinates: { x: number; y: number };
+    coordinates: { x: number; y: number; ownerId: number };
     creationDate: string;
     area: number;
     price: number;
@@ -28,6 +28,7 @@ interface Flat {
         name: string;
         year: number;
         numberOfFlatsOnFloor: number;
+        ownerId: number;
     };
     ownerId: number;
 }
@@ -99,7 +100,7 @@ const PaginatedFlatList: React.FC = () => {
             <Grid container spacing={2}>
                 {displayedFlats.map((flat) => (
                     <Grid item xs={12} sm={6} md={4} lg={3} xl={2.4} key={flat.id}>
-                        <FlatCard flat={flat} canEdite={flat.ownerId == user.id || user.role?.some((role: any) => role.name === "ADMIN")}/>
+                        <FlatCard flat={flat} canEdite={flat.ownerId === user.id || user.role?.some((role: any) => role.name === "ADMIN")} canEditeHouse={flat.house?.ownerId === user.id || user.role?.some((role: any) => role.name === "ADMIN")} canEditeCoordinates={flat.coordinates?.ownerId === user.id || user.role?.some((role: any) => role.name === "ADMIN")}/>
                     </Grid>
                 ))}
             </Grid>

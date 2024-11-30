@@ -34,8 +34,23 @@ interface AdminRequest {
     deniedDescription?: string;
     status?: RequestStatus;
 }
+interface Role {
+    id: number;
+    name: string;
+}
 
-const AdminRequests: React.FC = () => {
+interface User {
+    id: number;
+    username: string;
+    email: string;
+    name: string;
+    surname: string;
+    phoneNumber: string;
+    aboutUser: string;
+    role: Role[]; // Обновлено: массив объектов ролей
+}
+
+const AdminRequests: React.FC<{user: User}> = (user) => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [requests, setRequests] = useState<AdminRequest[]>([]);
     const [currentRequest, setCurrentRequest] = useState<AdminRequest | null>(null);
@@ -47,10 +62,10 @@ const AdminRequests: React.FC = () => {
 
     useEffect(() => {
         // Проверяем, есть ли у пользователя роль ADMIN
-        const user = JSON.parse(localStorage.getItem("user") || "{}");
-        setIsAdmin(user.role?.some((role: any) => role.name === "ADMIN"));
+        //const user = JSON.parse(localStorage.getItem("user") || "{}");
+        setIsAdmin(user.user.role?.some((role: any) => role.name === "ADMIN"));
 
-        if (user.role?.some((role: any) => role.name === "ADMIN")) {
+        if (user.user.role?.some((role: any) => role.name === "ADMIN")) {
             // Если пользователь администратор, загружаем список заявок
             fetchRequests();
         } else {
@@ -64,7 +79,7 @@ const AdminRequests: React.FC = () => {
             const response = await api.get("/users/admin-requests");
             setRequests(response.data.adminRequests);
         } catch (error) {
-            console.error("Ошибка загрузки заявок", error);
+            setErrorMessage("Ошибка загрузки заявок " + error);
         }
     };
 

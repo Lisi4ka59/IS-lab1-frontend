@@ -57,13 +57,21 @@ const UserProfile: React.FC = () => {
 
     // Загрузка данных пользователя из sessionStorage
     useEffect(() => {
-        const userData = localStorage.getItem('user');
-        if (userData) {
-            const parsedUser = JSON.parse(userData) as User;
-            setUser(parsedUser);
-            setEditedUser(parsedUser);
-        }
+        userData();
     }, []);
+
+    const userData = async () => {
+        try {
+            const response =  await api.get(`/users/profile`);
+            if (response) {
+                setUser(response.data.user);
+                setEditedUser(response.data.user);
+                localStorage.setItem("user", JSON.stringify(response.data.user));
+            }
+        } catch (error) {
+            setErrorMessage("Ошибка при загрузке пользователя!")
+        }
+    }
 
     // Обновление полей редактируемого пользователя
     const handleFieldChange = (field: keyof User, value: string) => {
@@ -391,7 +399,7 @@ const UserProfile: React.FC = () => {
 
                     >
 
-                        <AdminRequests/>
+                        <AdminRequests user={user}/>
                     </Box>
                 </>
             )}

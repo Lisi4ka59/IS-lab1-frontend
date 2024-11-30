@@ -18,13 +18,27 @@ import {
 } from '@mui/icons-material';
 import {useNavigate} from "react-router-dom";
 
+interface Role {
+    id: number;
+    name: string;
+}
+
+interface User {
+    id: number;
+    username: string;
+    email: string;
+    name: string;
+    surname: string;
+    phoneNumber: string;
+    aboutUser: string;
+    role: Role[]; // Обновлено: массив объектов ролей
+}
 
 const AppMenu: React.FC = () => {
     const [anchorElOptions, setAnchorElOptions] = useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const [user, setUser] = useState<any>(null);
     const [exit, setExit] = useState<boolean>(true);
-
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -33,6 +47,7 @@ const AppMenu: React.FC = () => {
         if (userData) {
             setUser(JSON.parse(userData)); // Преобразуем строку JSON в объект
             setExit(false);
+            console.log(user);
         } else {
             // Если нет данных о пользователе, редиректим на страницу логина
             setExit(true);
@@ -46,6 +61,10 @@ const AppMenu: React.FC = () => {
     };
     const handleOptionsMenuClose = () => {
         setAnchorElOptions(null);
+    };
+
+    const hasUserRole = (user: User): boolean => {
+        return user?.role?.some((role: Role) => role.name === "USER") ?? false;
     };
 
     // Открытие/закрытие поповера пользователя
@@ -88,27 +107,31 @@ const AppMenu: React.FC = () => {
                     <Button color="inherit" onClick={handleOptionsMenuOpen}>
                         Дополнительные опции
                     </Button>
-                    <Menu
-                        anchorEl={anchorElOptions}
-                        open={Boolean(anchorElOptions)}
-                        onClose={handleOptionsMenuClose}
-                    >
-                        <MenuItem onClick={() => console.log('Расчет среднего значения комнат')}>
-                            Расчет среднего значения комнат
-                        </MenuItem>
-                        <MenuItem onClick={() => console.log('Найти квартиру с максимальной площадью')}>
-                            Найти квартиру с максимальной площадью
-                        </MenuItem>
-                        <MenuItem onClick={() => console.log('Найти количество новых квартир')}>
-                            Найти количество новых квартир
-                        </MenuItem>
-                        <MenuItem onClick={() => console.log('Самая дорогая квартира без балкона')}>
-                            Самая дорогая квартира без балкона
-                        </MenuItem>
-                        <MenuItem onClick={() => console.log('Выбрать из трёх квартир наиболее дорогую')}>
-                            Выбрать из трёх квартир наиболее дорогую
-                        </MenuItem>
-                    </Menu>
+                        <Menu
+                            anchorEl={anchorElOptions}
+                            open={Boolean(anchorElOptions)}
+                            onClose={handleOptionsMenuClose}
+
+                        >
+                            <MenuItem onClick={() => navigate("/average-number-of-rooms")} disabled={!hasUserRole(user)}>
+                                Расчет среднего значения комнат
+
+                            </MenuItem>
+                            <MenuItem onClick={() => navigate("/flat-with-max-area")} disabled={!hasUserRole(user)}>
+                                Найти квартиру с максимальной площадью
+                            </MenuItem>
+                            <MenuItem onClick={() => navigate("/flats-count-by-is-new")} disabled={!hasUserRole(user)}>
+                                Найти количество новых/бу квартир
+                            </MenuItem>
+                            <MenuItem onClick={() => navigate("/most-expensive-flat-without-balcony")} disabled={!hasUserRole(user)}>
+                                Самая дорогая квартира без балкона
+                            </MenuItem>
+                            <MenuItem onClick={() => navigate("/most-expensive-flat-from-ids")} disabled={!hasUserRole(user)}>
+                                Выбрать из трёх квартир наиболее дорогую
+                            </MenuItem>
+                        </Menu>
+
+
                 </Box>
                 {!exit && (
                     <>
