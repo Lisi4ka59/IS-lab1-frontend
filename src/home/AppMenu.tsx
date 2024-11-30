@@ -40,6 +40,8 @@ const AppMenu: React.FC = () => {
     const [user, setUser] = useState<any>(null);
     const [exit, setExit] = useState<boolean>(true);
     const navigate = useNavigate();
+    const [firstEnter, setFirstEnter] = useState<boolean>(false);
+
 
     useEffect(() => {
         // Получаем информацию о пользователе из localStorage
@@ -69,14 +71,17 @@ const AppMenu: React.FC = () => {
 
     // Открытие/закрытие поповера пользователя
     const handleUserMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setFirstEnter(true);
         setAnchorElUser(event.currentTarget);
     };
     const handleUserMenuClose = () => {
+        setFirstEnter(false);
         setAnchorElUser(null);
     };
 
     // Выход пользователя
     const handleLogout = () => {
+        setFirstEnter(false);
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         setExit(true);
@@ -107,31 +112,31 @@ const AppMenu: React.FC = () => {
                     <Button color="inherit" onClick={handleOptionsMenuOpen}>
                         Дополнительные опции
                     </Button>
-                        <Menu
-                            anchorEl={anchorElOptions}
-                            open={Boolean(anchorElOptions)}
-                            onClose={handleOptionsMenuClose}
+                    <Menu
+                        anchorEl={anchorElOptions}
+                        open={Boolean(anchorElOptions)}
+                        onClose={handleOptionsMenuClose}
 
-                        >
-                            <MenuItem onClick={() => navigate("/average-number-of-rooms")} disabled={!hasUserRole(user)}>
-                                Расчет среднего значения комнат
+                    >
+                        <MenuItem onClick={() => navigate("/average-number-of-rooms")} disabled={!hasUserRole(user)}>
+                            Расчет среднего значения комнат
 
-                            </MenuItem>
-                            <MenuItem onClick={() => navigate("/flat-with-max-area")} disabled={!hasUserRole(user)}>
-                                Найти квартиру с максимальной площадью
-                            </MenuItem>
-                            <MenuItem onClick={() => navigate("/flats-count-by-is-new")} disabled={!hasUserRole(user)}>
-                                Найти количество новых/бу квартир
-                            </MenuItem>
-                            <MenuItem onClick={() => navigate("/most-expensive-flat-without-balcony")} disabled={!hasUserRole(user)}>
-                                Самая дорогая квартира без балкона
-                            </MenuItem>
-                            <MenuItem onClick={() => navigate("/most-expensive-flat-from-ids")} disabled={!hasUserRole(user)}>
-                                Выбрать из трёх квартир наиболее дорогую
-                            </MenuItem>
-                        </Menu>
-
-
+                        </MenuItem>
+                        <MenuItem onClick={() => navigate("/flat-with-max-area")} disabled={!hasUserRole(user)}>
+                            Найти квартиру с максимальной площадью
+                        </MenuItem>
+                        <MenuItem onClick={() => navigate("/flats-count-by-is-new")} disabled={!hasUserRole(user)}>
+                            Найти количество новых/бу квартир
+                        </MenuItem>
+                        <MenuItem onClick={() => navigate("/most-expensive-flat-without-balcony")}
+                                  disabled={!hasUserRole(user)}>
+                            Самая дорогая квартира без балкона
+                        </MenuItem>
+                        <MenuItem onClick={() => navigate("/most-expensive-flat-from-ids")}
+                                  disabled={!hasUserRole(user)}>
+                            Выбрать из трёх квартир наиболее дорогую
+                        </MenuItem>
+                    </Menu>
                 </Box>
                 {!exit && (
                     <>
@@ -163,50 +168,51 @@ const AppMenu: React.FC = () => {
                                     horizontal: 'right',
                                 }}
                             >
-                                <Box p={2} width={200}>
-                                    {user && (
-                                        <>
-                                            <Typography variant="subtitle1"><strong>{user.name} {user.surname}</strong></Typography>
-                                            <Typography variant="body2">{user.email}</Typography>
-                                            <Typography variant="body2">{user.phoneNumber}</Typography>
-                                            <Typography variant="body2" sx={{mt: 1}}>{user.aboutUser}</Typography>
-                                            <Box mt={2} display="flex" flexDirection="column" gap={0}>
-                                                <Button
-                                                    startIcon={<PersonIcon/>}
-                                                    onClick={goToProfile}
-                                                    color="primary"
-                                                    sx={{
-                                                        justifyContent: 'flex-start',
-                                                        textTransform: 'none',
-                                                        backgroundColor: 'transparent',
-                                                        color: 'inherit',
-                                                        '&:hover': {
-                                                            backgroundColor: 'rgba(0, 0, 0, 0.1)', // Лёгкий эффект при наведении
-                                                        },
-                                                    }}
-                                                >
-                                                    Профиль
-                                                </Button>
-                                                <Button
-                                                    startIcon={<ExitToAppIcon/>}
-                                                    onClick={handleLogout}
-                                                    color="error"
-                                                    sx={{
-                                                        justifyContent: 'flex-start',
-                                                        textTransform: 'none',
-                                                        backgroundColor: 'transparent',
-                                                        color: 'red', // Красный шрифт
-                                                        '&:hover': {
-                                                            backgroundColor: 'rgba(255, 0, 0, 0.1)', // Лёгкий эффект при наведении
-                                                        },
-                                                    }}
-                                                >
-                                                    Выйти
-                                                </Button>
-                                            </Box>
-                                        </>
-                                    )}
-                                </Box>
+                                {user && firstEnter && (
+                                    <Box p={2} width={200}>
+
+
+                                        <Typography
+                                            variant="subtitle1"><strong>{user.name} {user.surname}</strong></Typography>
+                                        <Typography variant="body2">{user.email}</Typography>
+                                        <Typography variant="body2">{user.phoneNumber}</Typography>
+                                        <Typography variant="body2" sx={{mt: 1}}>{user.aboutUser}</Typography>
+                                        <Box mt={2} display="flex" flexDirection="column" gap={0}>
+                                            <Button
+                                                startIcon={<PersonIcon/>}
+                                                onClick={goToProfile}
+                                                color="primary"
+                                                sx={{
+                                                    justifyContent: 'flex-start',
+                                                    textTransform: 'none',
+                                                    backgroundColor: 'transparent',
+                                                    color: 'inherit',
+                                                    '&:hover': {
+                                                        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                                                    },
+                                                }}
+                                            >
+                                                Профиль
+                                            </Button>
+                                            <Button
+                                                startIcon={<ExitToAppIcon/>}
+                                                onClick={handleLogout}
+                                                color="error"
+                                                sx={{
+                                                    justifyContent: 'flex-start',
+                                                    textTransform: 'none',
+                                                    backgroundColor: 'transparent',
+                                                    color: 'red',
+                                                    '&:hover': {
+                                                        backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                                                    },
+                                                }}
+                                            >
+                                                Выйти
+                                            </Button>
+                                        </Box>
+                                    </Box>
+                                )}
                             </Popover>
                         </Box>
                     </>

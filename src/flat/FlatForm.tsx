@@ -85,8 +85,8 @@ const FlatForm: React.FC = () => {
             name: "",
             area: "",
             price: "",
-            house: null, // Убедитесь, что изначально это null
-            coordinates: null, // Убедитесь, что изначально это null
+            house: null,
+            coordinates: null,
             balcony: false,
             timeToMetroOnFoot: "",
             numberOfRooms: "",
@@ -107,6 +107,7 @@ const FlatForm: React.FC = () => {
                 numberOfRooms: parseInt(values.numberOfRooms || "0", 10), // Преобразование в число
                 house: selectedHouse, // Используем выбранный дом
                 coordinates: selectedCoordinates, // Используем выбранные координаты
+                furnish: values.furnish || null,
             };
 
             try {
@@ -115,6 +116,7 @@ const FlatForm: React.FC = () => {
                         "Content-Type": "application/json",
                     },
                 });
+
                 setSuccessMessage("Квартира успешно создана.");
                 setErrorMessage("");
                 formik.resetForm();
@@ -280,11 +282,14 @@ const FlatForm: React.FC = () => {
             <FormControl fullWidth>
                 <InputLabel>Стиль мебели</InputLabel>
                 <Select
-                    value={formik.values.furnish ?? null}
-                    onChange={(e) => formik.setFieldValue("furnish", e.target.value || null)}
+                    value={formik.values.furnish ?? null} // Отображаем null, если значение отсутствует
+                    onChange={(e) => {
+                        const value = e.target.value === "null" ? null : e.target.value;
+                        formik.setFieldValue("furnish", value);
+                    }}
                     label="Стиль мебели"
                 >
-                    <MenuItem value="">
+                    <MenuItem value="null">
                         <em>Не выбрано</em>
                     </MenuItem>
                     {Object.values(Furnish).map((furnishOption) => (
@@ -294,6 +299,8 @@ const FlatForm: React.FC = () => {
                     ))}
                 </Select>
             </FormControl>
+
+
 
             <FormControl fullWidth>
                 <InputLabel>Вид из окна</InputLabel>

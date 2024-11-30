@@ -13,14 +13,13 @@ const AuthPage: React.FC = () => {
     return (
         <Box
             sx={{
-                height: '100vh',
-                width: '100vw',
+                mt: 20,
+                width: '100%',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
                 overflow: 'auto',
-                //backgroundColor: '#f5f5f5',
                 p: 2,
                 boxSizing: 'border-box',
             }}
@@ -32,7 +31,6 @@ const AuthPage: React.FC = () => {
                     p: 3,
                     borderRadius: 2,
                     boxShadow: 3,
-                    //backgroundColor: '#fff',
                 }}
             >
                 {showLogin ? (

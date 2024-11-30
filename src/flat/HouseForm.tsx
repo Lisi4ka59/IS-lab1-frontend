@@ -103,6 +103,7 @@ const HouseForm: React.FC<HouseFormProps> = ({ onClose }) => {
             <TextField
                 label="Количество квартир на этаже"
                 type="text"
+
                 {...formik.getFieldProps("numberOfFlatsOnFloor")}
                 error={
                     formik.touched.numberOfFlatsOnFloor &&
