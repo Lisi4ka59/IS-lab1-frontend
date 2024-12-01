@@ -49,7 +49,7 @@ const AppMenu: React.FC = () => {
         if (userData) {
             setUser(JSON.parse(userData)); // Преобразуем строку JSON в объект
             setExit(false);
-            console.log(user);
+
         } else {
             // Если нет данных о пользователе, редиректим на страницу логина
             setExit(true);
@@ -106,7 +106,7 @@ const AppMenu: React.FC = () => {
                     <Button color="inherit" onClick={() => navigate("/flat/create")}>
                         Создать квартиру
                     </Button>
-                    <Button color="inherit" onClick={() => console.log('Поиск квартиры')}>
+                    <Button color="inherit" onClick={() => navigate("/flat-search")}>
                         Поиск квартиры
                     </Button>
                     <Button color="inherit" onClick={handleOptionsMenuOpen}>

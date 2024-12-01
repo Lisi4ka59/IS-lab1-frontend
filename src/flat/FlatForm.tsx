@@ -50,6 +50,8 @@ const FlatForm: React.FC = () => {
     const [openCoordinatesModal, setOpenCoordinatesModal] = useState(false); // Для отображения формы создания координат
     const [selectedHouse, setSelectedHouse] = useState<any>(null);
     const [selectedCoordinates, setSelectedCoordinates] = useState<any>(null);
+    const [errorDataMessage, setErrorDataMessage] = useState('');
+
 
     useEffect(() => {
         // Загрузка существующих домов и координат
@@ -59,8 +61,9 @@ const FlatForm: React.FC = () => {
                 setHouses(houseResponse.data.houses);
                 const coordinatesResponse = await api.get("/flats/coordinates");
                 setCoordinates(coordinatesResponse.data.coordinates);
+                setErrorDataMessage("");
             } catch (error) {
-                console.error("Ошибка при загрузке данных", error);
+                setErrorDataMessage("Ошибка при загрузке дополнительных классов");
             }
         };
         fetchData();
@@ -171,7 +174,7 @@ const FlatForm: React.FC = () => {
             <Typography variant="h4" align="center" gutterBottom>
                 Создать квартиру
             </Typography>
-
+            {errorDataMessage && <Typography color="error" align={"center"}>{errorDataMessage}</Typography>}
             {successMessage && <Alert severity="success">{successMessage}</Alert>}
             {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 

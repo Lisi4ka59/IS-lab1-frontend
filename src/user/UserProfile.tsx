@@ -57,6 +57,7 @@ const UserProfile: React.FC = () => {
 
     // Загрузка данных пользователя из sessionStorage
     useEffect(() => {
+        document.title = 'Профиль';
         userData();
     }, []);
 

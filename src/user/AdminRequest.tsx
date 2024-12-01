@@ -17,7 +17,9 @@ import {
     Paper,
 } from "@mui/material";
 import api from "../api";
-import { Inbox as InboxIcon } from "@mui/icons-material";
+import {Inbox as InboxIcon} from "@mui/icons-material";
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 enum RequestStatus {
@@ -34,6 +36,7 @@ interface AdminRequest {
     deniedDescription?: string;
     status?: RequestStatus;
 }
+
 interface Role {
     id: number;
     name: string;
@@ -50,7 +53,7 @@ interface User {
     role: Role[]; // Обновлено: массив объектов ролей
 }
 
-const AdminRequests: React.FC<{user: User}> = (user) => {
+const AdminRequests: React.FC<{ user: User }> = (user) => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [requests, setRequests] = useState<AdminRequest[]>([]);
     const [currentRequest, setCurrentRequest] = useState<AdminRequest | null>(null);
@@ -59,6 +62,8 @@ const AdminRequests: React.FC<{user: User}> = (user) => {
     const [selectedRequest, setSelectedRequest] = useState<AdminRequest | null>(null);
     const [isDenyDialogOpen, setIsDenyDialogOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const [requestNotFound, setRequestNotFound] = useState(true);
+    const [errorRequestMessage, setErrorRequestMessage] = useState("");
 
     useEffect(() => {
         // Проверяем, есть ли у пользователя роль ADMIN
@@ -87,9 +92,12 @@ const AdminRequests: React.FC<{user: User}> = (user) => {
         try {
             const response = await api.get("/users/admin-request");
             setCurrentRequest(response.data.adminRequest);
+            setRequestNotFound(false);
+            setErrorMessage("");
         } catch (error: any) {
             if (error.response?.status === 404) {
                 setCurrentRequest(null);
+                setRequestNotFound(true);
             } else {
                 setErrorMessage("Не удалось загрузить вашу заявку");
             }
@@ -116,8 +124,9 @@ const AdminRequests: React.FC<{user: User}> = (user) => {
         try {
             await api.put(`/users/admin-requests/${requestId}/accept`);
             fetchRequests();
+            setErrorRequestMessage("");
         } catch (error) {
-            console.error("Ошибка при принятии заявки", error);
+            setErrorRequestMessage("Ошибка при принятии заявки");
         }
     };
 
@@ -132,6 +141,7 @@ const AdminRequests: React.FC<{user: User}> = (user) => {
             setDeniedReason("");
             setSelectedRequest(null);
             setIsDenyDialogOpen(false);
+            setErrorMessage("");
         } catch (error) {
             setErrorMessage("Не удалось отклонить заявку, попробуйте снова");
         }
@@ -140,48 +150,59 @@ const AdminRequests: React.FC<{user: User}> = (user) => {
     return (
         <Box>
             {!isAdmin ? (
-                currentRequest ? (
-                    <Paper elevation={2} sx={{p: 2}}>
-                        <Typography variant="h6" gutterBottom>
-                            Ваша заявка
-                        </Typography>
-                        <Typography>
-                            <strong>ID заявки:</strong> {currentRequest.id}
-                        </Typography>
-                        <Typography>
-                            <strong>Статус:</strong> {currentRequest.status}
-                        </Typography>
-                        <Typography>
-                            <strong>Описание:</strong> {currentRequest.description}
-                        </Typography>
-                        {currentRequest.status === RequestStatus.DENIED && (
-                            <Typography color="error">
-                                <strong>Причина отказа:</strong> {currentRequest.deniedDescription}
+                !requestNotFound ? (
+
+
+                        currentRequest ? (
+                        <Paper elevation={2} sx={{p: 2}}>
+                            <Typography variant="h6" gutterBottom>
+                                Ваша заявка
                             </Typography>
-                        )}
-                    </Paper>
+                            <Typography>
+                                <strong>ID заявки:</strong> {currentRequest.id}
+                            </Typography>
+                            <Typography>
+                                <strong>Статус:</strong> {currentRequest.status}
+                            </Typography>
+                            <Typography>
+                                <strong>Описание:</strong> {currentRequest.description}
+                            </Typography>
+                            {currentRequest.status === RequestStatus.DENIED && (
+                                <Typography color="error">
+                                    <strong>Причина отказа:</strong> {currentRequest.deniedDescription}
+                                </Typography>
+                            )}
+                        </Paper>
+                        ) : (
+                        <Box>
+                            <Typography variant="h6" gutterBottom>
+                                Подать заявку на администратора
+                            </Typography>
+                            <TextField
+                                label="Расскажите свою мотивацию стать администратором"
+                                multiline
+                                rows={4}
+                                value={newRequestDescription}
+                                onChange={(e) => setNewRequestDescription(e.target.value)}
+                                fullWidth
+                            />
+                            {errorMessage && <Typography color="error">{errorMessage}</Typography>}
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleSubmitRequest}
+                                sx={{mt: 2}}
+                            >
+                                Отправить заявку
+                            </Button>
+                        </Box>
+                        )
+
                 ) : (
                     <Box>
-                        <Typography variant="h6" gutterBottom>
-                            Подать заявку на администратора
+                        <Typography variant="h6" color={"error"} gutterBottom>
+                            Ошибка при загрузке вашей заявки!
                         </Typography>
-                        <TextField
-                            label="Расскажите свою мотивацию стать администратором"
-                            multiline
-                            rows={4}
-                            value={newRequestDescription}
-                            onChange={(e) => setNewRequestDescription(e.target.value)}
-                            fullWidth
-                        />
-                        {errorMessage && <Typography color="error">{errorMessage}</Typography>}
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleSubmitRequest}
-                            sx={{mt: 2}}
-                        >
-                            Отправить заявку
-                        </Button>
                     </Box>
                 )
 
@@ -191,17 +212,19 @@ const AdminRequests: React.FC<{user: User}> = (user) => {
                     <Typography variant="h6" gutterBottom align={"center"}>
                         Заявки на администратора:
                     </Typography>
+                    {errorRequestMessage && <Typography align={"center"} color="error">{errorRequestMessage}</Typography>}
 
 
                     {requests.length !== 0 ? (
-                        <>
+                        <Box width={"100%"} alignItems={"center"}>
                             <Table>
+
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>ID</TableCell>
-                                        <TableCell>Пользователь</TableCell>
-                                        <TableCell>Описание</TableCell>
-                                        <TableCell>Действия</TableCell>
+                                        <TableCell width={"10%"}>ID</TableCell>
+                                        <TableCell width={"20%"}>Пользователь</TableCell>
+                                        <TableCell sx={{ wordBreak: 'break-word', minWidth: '200px'}} width={"50%"}>Описание</TableCell>
+                                        <TableCell width={"20%"}>Действия</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -210,26 +233,27 @@ const AdminRequests: React.FC<{user: User}> = (user) => {
                                         <TableRow key={request.id}>
                                             <TableCell>{request.id}</TableCell>
                                             <TableCell>{request.username}</TableCell>
-                                            <TableCell>{request.description}</TableCell>
+                                            <TableCell sx={{ wordBreak: 'break-word', whiteSpace: 'normal' }}>{request.description}</TableCell>
                                             <TableCell>
                                                 <Stack direction="row" spacing={1}>
                                                     <Button
                                                         color="success"
-                                                        variant="contained"
+                                                        //variant="contained"
                                                         onClick={() => handleAcceptRequest(request.id)}
-                                                    >
-                                                        Принять
-                                                    </Button>
+                                                        startIcon={<CheckIcon />}
+
+                                                    />
                                                     <Button
+
                                                         color="error"
                                                         variant="contained"
+                                                        startIcon={<CloseIcon />}
                                                         onClick={() => {
                                                             setSelectedRequest(request);
                                                             setIsDenyDialogOpen(true);
                                                         }}
-                                                    >
-                                                        Отклонить
-                                                    </Button>
+
+                                                    />
                                                 </Stack>
                                             </TableCell>
                                         </TableRow>
@@ -238,7 +262,7 @@ const AdminRequests: React.FC<{user: User}> = (user) => {
                                     ))}
                                 </TableBody>
                             </Table>
-                        </>
+                        </Box>
                     ) : (
                         <Box display="flex" flexDirection="column" alignItems="center" sx={{mt: 4}}>
                             <InboxIcon sx={{fontSize: 64, color: "gray"}}/>
@@ -260,7 +284,7 @@ const AdminRequests: React.FC<{user: User}> = (user) => {
                 fullWidth
                 maxWidth="sm"
             >
-                <DialogTitle>Отклонение заявки</DialogTitle>
+                <DialogTitle >Отклонение заявки</DialogTitle>
                 <DialogContent>
                     <TextField
                         label="Причина отказа"
@@ -270,6 +294,7 @@ const AdminRequests: React.FC<{user: User}> = (user) => {
                         onChange={(e) => setDeniedReason(e.target.value)}
                         fullWidth
                     />
+
                     {errorMessage && <Typography color="error">{errorMessage}</Typography>}
                 </DialogContent>
                 <DialogActions>

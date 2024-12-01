@@ -55,6 +55,9 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean, canEditeHouse: boolean
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [currentFlat, setCurrentFlat] = useState(flat);
     const [isDeleted, setIsDeleted] = useState(false);
+    const [errorDataMessage, setErrorDataMessage] = useState('');
+    const [errorDeletingMessage, setErrorDeletingMessage] = useState('');
+
 
     // Обработчик изменения полей
     const handleChange = (
@@ -91,8 +94,9 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean, canEditeHouse: boolean
             setEditedFlat(response.data.updatedFlat); // Обновляем данные в форме
             flat = response.data.updatedFlat;
             setIsEditing(false); // Выходим из режима редактирования
+            setErrorDataMessage("");
         } catch (error) {
-            console.error("Ошибка при сохранении изменений:", error);
+            setErrorDataMessage("Ошибка при сохранении изменений");
         }
     };
 
@@ -101,16 +105,16 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean, canEditeHouse: boolean
         try {
             await api.delete(`/flats/${flat.id}`);
             setIsDeleted(true); // Устанавливаем состояние "удалено"
-        } catch (error) {
-            console.error("Ошибка при удалении:", error);
-        } finally {
             setIsDeleteDialogOpen(false);
+            setErrorDeletingMessage("");
+        } catch (error) {
+            setErrorDeletingMessage("Ошибка при удалении");
         }
     };
 
 
     return (
-        <Card sx={{maxWidth: 600, minWidth: 200, margin: "auto", position: "relative"}}>
+        <Card sx={{maxWidth: 600, minWidth: 200, margin: "auto", position: "relative", marginTop: "20px"}} >
             {/* Кнопки редактирования и удаления */}
             {canEdite && (
                 <Box sx={{position: "absolute", top: 8, right: 8, display: "flex"}}>
@@ -364,6 +368,8 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean, canEditeHouse: boolean
                                     >
                                         Отменить
                                     </Button>
+                                    {errorDataMessage && <Typography color="error" align={"center"}>{errorDataMessage}</Typography>}
+
                                 </Box>
                             </>
                         ) : (
@@ -431,7 +437,6 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean, canEditeHouse: boolean
 
                                 <Divider sx={{marginY: 2}}/>
 
-                                {/* Прочая информация */}
                                 <Typography variant="body1">
                                     <strong>Дата создания:</strong>{" "}
                                     {new Date(currentFlat.creationDate).toLocaleString("ru-RU")}
@@ -452,6 +457,7 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean, canEditeHouse: boolean
                     <Button onClick={handleDelete} color="error">
                         Удалить
                     </Button>
+                    {errorDeletingMessage && <Typography color="error" align={"center"}>{errorDeletingMessage}</Typography>}
                 </DialogActions>
             </Dialog>
         </Card>

@@ -11,7 +11,8 @@ import AverageNumberOfRooms from "./advanced-flat/AverageNumberOfRooms.tsx";
 import FlatWithMaxArea from "./advanced-flat/FlatWithMaxArea.tsx";
 import FlatsCountByIsNew from "./advanced-flat/FlatsCountByIsNew.tsx";
 import MostExpensiveFlatWithoutBalcony from "./advanced-flat/MostExpensiveFlatWithoutBalcony.tsx";
-import MostExpensiveFlatFromIds from "./advanced-flat/MostExpensiveFlatFromIds.tsx"; // Импорт Layout-компонента
+import MostExpensiveFlatFromIds from "./advanced-flat/MostExpensiveFlatFromIds.tsx";
+import FlatSearch from "./flat/FlatSearch.tsx"; // Импорт Layout-компонента
 
 
 const theme = createTheme({
@@ -38,6 +39,7 @@ const App: React.FC = () => {
                         <Route path="/flats-count-by-is-new" element={<FlatsCountByIsNew/>}/>
                         <Route path="/most-expensive-flat-without-balcony" element={<MostExpensiveFlatWithoutBalcony/>}/>
                         <Route path="/most-expensive-flat-from-ids" element={<MostExpensiveFlatFromIds/>}/>
+                        <Route path="/flat-search" element={<FlatSearch/>}/>
 
                         <Route path="*" element={<Navigate to="/"/>}/>
                     </Routes>
