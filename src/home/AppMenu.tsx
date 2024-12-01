@@ -31,7 +31,7 @@ interface User {
     surname: string;
     phoneNumber: string;
     aboutUser: string;
-    role: Role[]; // Обновлено: массив объектов ролей
+    role: Role[];
 }
 
 const AppMenu: React.FC = () => {
@@ -44,20 +44,16 @@ const AppMenu: React.FC = () => {
 
 
     useEffect(() => {
-        // Получаем информацию о пользователе из localStorage
         const userData = localStorage.getItem('user');
         if (userData) {
-            setUser(JSON.parse(userData)); // Преобразуем строку JSON в объект
+            setUser(JSON.parse(userData));
             setExit(false);
-
         } else {
-            // Если нет данных о пользователе, редиректим на страницу логина
             setExit(true);
             navigate('/auth');
         }
     }, [navigate]);
 
-    // Открытие/закрытие меню дополнительных опций
     const handleOptionsMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElOptions(event.currentTarget);
     };
@@ -69,7 +65,6 @@ const AppMenu: React.FC = () => {
         return user?.role?.some((role: Role) => role.name === "USER") ?? false;
     };
 
-    // Открытие/закрытие поповера пользователя
     const handleUserMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setFirstEnter(true);
         setAnchorElUser(event.currentTarget);
@@ -79,20 +74,17 @@ const AppMenu: React.FC = () => {
         setAnchorElUser(null);
     };
 
-    // Выход пользователя
     const handleLogout = () => {
         setFirstEnter(false);
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         setExit(true);
-
-        navigate('/auth'); // Перенаправление на страницу логина после выхода
+        navigate('/auth');
 
     };
 
-    // Переход в профиль пользователя
     const goToProfile = () => {
-        navigate(`/profile`); // Используем ID пользователя для перехода
+        navigate(`/profile`);
     };
 
     return (

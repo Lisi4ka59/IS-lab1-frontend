@@ -13,7 +13,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 interface CoordinatesFormProps {
-    onClose: (newCoordinates: any) => void; // Типизация пропса onClose
+    onClose: (newCoordinates: any) => void;
 }
 
 const CoordinatesForm: React.FC<CoordinatesFormProps> = ({ onClose }) => {
@@ -55,13 +55,12 @@ const CoordinatesForm: React.FC<CoordinatesFormProps> = ({ onClose }) => {
         onSubmit: async (values) => {
             setLoading(true);
             try {
-                // Преобразуем текстовые значения в числа перед отправкой
                 const payload = {
                     x: parseFloat(values.x),
                     y: parseFloat(values.y),
                 };
 
-                const response = await api.post("/flats/coordinates", payload); // Замените на ваш API вызов
+                const response = await api.post("/flats/coordinates", payload);
                 setSuccessMessage("Координаты успешно созданы.");
                 onClose(response.data);
                 formik.resetForm();

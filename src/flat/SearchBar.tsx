@@ -12,7 +12,7 @@ const SearchBar: React.FC<{ onSearch: (query: string) => void }> = ({ onSearch }
     };
 
     const handleButtonClick = (field: string) => {
-        const newQuery = query ? `${query}/${field}` : field;  // Если запрос не пустой, добавляем через '/'
+        const newQuery = query ? `${query}/${field}` : field;
         setQuery(newQuery);
         onSearch(newQuery);
     };

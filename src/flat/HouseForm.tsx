@@ -12,7 +12,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 interface HouseFormProps {
-    onClose: (newHouse: any) => void; // Типизация пропса onClose
+    onClose: (newHouse: any) => void;
 }
 
 const HouseForm: React.FC<HouseFormProps> = ({ onClose }) => {
@@ -50,9 +50,9 @@ const HouseForm: React.FC<HouseFormProps> = ({ onClose }) => {
                     numberOfFlatsOnFloor: parseInt(values.numberOfFlatsOnFloor, 10),
                 };
 
-                const response = await api.post("/flats/house", payload); // Замените на ваш API вызов
+                const response = await api.post("/flats/house", payload);
                 setSuccessMessage("Дом успешно создан.");
-                onClose(response.data); // Передаем созданные данные через onClose
+                onClose(response.data);
 
                 formik.resetForm();
             } catch (error: any) {

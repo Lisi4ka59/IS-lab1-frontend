@@ -39,7 +39,6 @@ const RegistrationForm: React.FC = () => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
 
-        // Проверяем пароли на совпадение
         if (name === 'confirmPassword' || name === 'password') {
             setPasswordError(
                 name === 'confirmPassword' && value !== formData.password

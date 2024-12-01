@@ -64,10 +64,8 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean, canEditeHouse: boolean
     ) => {
         const { name, value } = event.target;
 
-        // Временная переменная для отслеживания ошибки
         let error = '';
 
-        // Валидация полей
         switch (name) {
             case 'name':
                 if (!value.trim()) {
@@ -156,25 +154,23 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean, canEditeHouse: boolean
         }));
     };
 
-    // Сохранение изменений
     const handleSave = async () => {
         try {
             const response = await api.put(`/flats`, editedFlat);
-            setCurrentFlat(response.data.updatedFlat); // Обновляем карточку
-            setEditedFlat(response.data.updatedFlat); // Обновляем данные в форме
+            setCurrentFlat(response.data.updatedFlat);
+            setEditedFlat(response.data.updatedFlat);
             flat = response.data.updatedFlat;
-            setIsEditing(false); // Выходим из режима редактирования
+            setIsEditing(false);
             setErrorDataMessage("");
         } catch (error) {
             setErrorDataMessage("Ошибка при сохранении изменений");
         }
     };
 
-    // Удаление квартиры
     const handleDelete = async () => {
         try {
             await api.delete(`/flats/${flat.id}`);
-            setIsDeleted(true); // Устанавливаем состояние "удалено"
+            setIsDeleted(true);
             setIsDeleteDialogOpen(false);
             setErrorDeletingMessage("");
         } catch (error) {

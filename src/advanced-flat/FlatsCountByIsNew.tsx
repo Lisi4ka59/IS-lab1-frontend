@@ -3,7 +3,7 @@ import api from '../api';
 import { Box, ToggleButton, ToggleButtonGroup, Typography, CircularProgress, Alert } from '@mui/material';
 
 const FlatsCountByIsNew: React.FC = () => {
-    const [value, setValue] = useState<boolean>(true); // true для новостроек, false для бывших в употреблении
+    const [value, setValue] = useState<boolean>(true);
     const [count, setCount] = useState<number | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -22,7 +22,7 @@ const FlatsCountByIsNew: React.FC = () => {
         };
 
         fetchFlatsCount();
-    }, [value]); // Запрос будет повторяться при изменении значения value
+    }, [value]);
 
     const handleToggle = (_: React.MouseEvent<HTMLElement>, newValue: boolean | null) => {
         if (newValue !== null) {

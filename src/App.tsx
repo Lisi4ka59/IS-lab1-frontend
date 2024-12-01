@@ -12,12 +12,12 @@ import FlatWithMaxArea from "./advanced-flat/FlatWithMaxArea.tsx";
 import FlatsCountByIsNew from "./advanced-flat/FlatsCountByIsNew.tsx";
 import MostExpensiveFlatWithoutBalcony from "./advanced-flat/MostExpensiveFlatWithoutBalcony.tsx";
 import MostExpensiveFlatFromIds from "./advanced-flat/MostExpensiveFlatFromIds.tsx";
-import FlatSearch from "./flat/FlatSearch.tsx"; // Импорт Layout-компонента
+import FlatSearch from "./flat/FlatSearch.tsx";
 
 
 const theme = createTheme({
     palette: {
-        mode: 'dark',  // Используем темную палитру
+        mode: 'dark',
     },
 });
 

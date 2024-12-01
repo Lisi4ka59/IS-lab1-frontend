@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import api from '../api';
 import { Box, TextField, Button, CircularProgress, Alert, Typography } from '@mui/material';
-import FlatCard from '../flat/FlatCard'; // Импортируем компонент FlatCard
+import FlatCard from '../flat/FlatCard';
 
 interface Coordinates {
     x: number;
@@ -43,9 +43,8 @@ const MostExpensiveFlatFromIds: React.FC = () => {
     };
 
     const handleSubmit = async () => {
-        const idArray = ids.split(',').map((id) => id.trim()).filter(Boolean); // Разбиваем по запятой и очищаем пробелы
+        const idArray = ids.split(',').map((id) => id.trim()).filter(Boolean);
 
-        // Проверяем, что введены ровно три id, и все они неотрицательные числа
         if (idArray.length !== 3) {
             setValidationError('Пожалуйста, введите ровно 3 id.');
             return;
@@ -57,7 +56,7 @@ const MostExpensiveFlatFromIds: React.FC = () => {
             return;
         }
 
-        setValidationError(null); // Очищаем ошибку валидации
+        setValidationError(null);
         setLoading(true);
 
         try {

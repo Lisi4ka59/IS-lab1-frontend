@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api';
 import {Box, CircularProgress, Alert, Typography} from '@mui/material';
-import FlatCard from '../flat/FlatCard'; // Импортируем компонент карточки (путь зависит от вашей структуры проекта)
+import FlatCard from '../flat/FlatCard';
 
 interface Coordinates {
     x: number;

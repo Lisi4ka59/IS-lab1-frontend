@@ -42,20 +42,18 @@ const FlatSearch: React.FC = () => {
     const [user, setUser] = useState<any>(null);
 
 
-    // Функция для получения списка квартир
     const fetchFlats = async () => {
         const response = await api.get('/flats/flat-list');
         const data = response.data;
         setFlats(data.flats);
     };
 
-    // Обработчик поиска
     const handleSearch = (query: string) => {
         setSearchQuery(query);
     };
 
     const filterFlats = (flats: Flat[], query: string) => {
-        const conditions = query.split('/').map(item => item.trim()).filter(Boolean);  // Разделяем по "/"
+        const conditions = query.split('/').map(item => item.trim()).filter(Boolean);
 
         return flats.filter(flat => {
             return conditions.every(condition => {
@@ -72,19 +70,17 @@ const FlatSearch: React.FC = () => {
     const getNestedValue = (obj: any, path: string): any => {
         return path.split('.').reduce((acc, key) => acc?.[key], obj);
     };
-    // Загружаем данные при монтировании компонента
+
     React.useEffect(() => {
         fetchFlats();
         const savedUser = localStorage.getItem('user');
         if (savedUser) {
-            setUser(JSON.parse(savedUser)); // Преобразуем строку JSON в объект
+            setUser(JSON.parse(savedUser));
         } else {
-            // Если нет данных о пользователе, редиректим на страницу логина
             navigate('/auth');
         }
     }, []);
 
-    // Фильтруем квартиры
     const filteredFlats = filterFlats(flats, searchQuery);
 
     return (

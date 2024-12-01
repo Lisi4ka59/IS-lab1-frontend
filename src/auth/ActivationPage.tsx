@@ -19,7 +19,7 @@ const ActivationPage: React.FC = () => {
         try {
             await api.get(`/activate`, {params: {token}});
             setSuccess(true);
-            setTimeout(() => navigate('/auth'), 2000); // Перенаправление на главную через 2 секунды
+            setTimeout(() => navigate('/auth'), 2000);
         } catch (err: any) {
             setError(err.response?.data?.error || 'Не удалось активировать аккаунт.');
         } finally {
@@ -62,7 +62,7 @@ const ActivationPage: React.FC = () => {
                 justifyContent: 'center',
 
                 overflow: 'auto',
-                //backgroundColor: '#f5f5f5',
+
                 p: 2,
                 boxSizing: 'border-box',
             }}

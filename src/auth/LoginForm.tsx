@@ -14,7 +14,7 @@ import {Visibility, VisibilityOff} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 
 const LoginForm: React.FC = () => {
-    const navigate = useNavigate(); // Инициализируем хук для навигации
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         login: '',

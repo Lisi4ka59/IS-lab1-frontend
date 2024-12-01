@@ -10,7 +10,7 @@ import api from "../api";
 import FlatCard from "./FlatCard";
 import {useNavigate} from "react-router-dom";
 
-// Тип для описания квартиры
+
 interface Flat {
     id: number;
     name: string;
@@ -42,7 +42,6 @@ const PaginatedFlatList: React.FC = () => {
     const [user, setUser] = useState<any>(null);
     const navigate = useNavigate();
 
-    // Загрузка списка квартир с сервера
     useEffect(() => {
         const fetchFlats = async () => {
             try {
@@ -51,9 +50,8 @@ const PaginatedFlatList: React.FC = () => {
                 const data = response.data;
                 const savedUser = localStorage.getItem('user');
                 if (savedUser) {
-                    setUser(JSON.parse(savedUser)); // Преобразуем строку JSON в объект
+                    setUser(JSON.parse(savedUser));
                 } else {
-                    // Если нет данных о пользователе, редиректим на страницу логина
                     navigate('/auth');
                 }
 
@@ -69,7 +67,6 @@ const PaginatedFlatList: React.FC = () => {
         fetchFlats();
     }, [navigate]);
 
-    // Рассчитываем отображаемые квартиры
     const displayedFlats = flats.slice(
         (page - 1) * itemsPerPage,
         page * itemsPerPage

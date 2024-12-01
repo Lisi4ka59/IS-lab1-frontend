@@ -1,10 +1,9 @@
-// Layout.tsx
 import React from 'react';
-import AppMenu from './home/AppMenu'; // Импорт компонента меню
+import AppMenu from './home/AppMenu';
 import { Box } from '@mui/material';
 
 interface LayoutProps {
-    children: React.ReactNode; // Область для вставки контента
+    children: React.ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {

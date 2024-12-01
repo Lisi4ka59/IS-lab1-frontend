@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import api from '../api';
 import {Box, CircularProgress, Alert, Typography} from '@mui/material';
-import FlatCard from '../flat/FlatCard'; // Импортируем компонент FlatCard
+import FlatCard from '../flat/FlatCard';
 
 interface Coordinates {
     x: number;
@@ -40,7 +40,7 @@ const MostExpensiveFlatWithoutBalcony: React.FC = () => {
         const fetchMostExpensiveFlat = async () => {
             try {
                 setLoading(true);
-                const response = await api.get('/ad-flat/most-expensive-without-balcony'); // эндпоинт для получения самой дорогой квартиры без балкона
+                const response = await api.get('/ad-flat/most-expensive-without-balcony');
                 setFlat(response.data.flat);
             } catch (err: any) {
                 setError(err.response?.data?.message || 'Ошибка при загрузке данных.');

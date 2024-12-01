@@ -50,7 +50,7 @@ interface User {
     surname: string;
     phoneNumber: string;
     aboutUser: string;
-    role: Role[]; // Обновлено: массив объектов ролей
+    role: Role[];
 }
 
 const AdminRequests: React.FC<{ user: User }> = (user) => {
@@ -66,15 +66,11 @@ const AdminRequests: React.FC<{ user: User }> = (user) => {
     const [errorRequestMessage, setErrorRequestMessage] = useState("");
 
     useEffect(() => {
-        // Проверяем, есть ли у пользователя роль ADMIN
-        //const user = JSON.parse(localStorage.getItem("user") || "{}");
         setIsAdmin(user.user.role?.some((role: any) => role.name === "ADMIN"));
 
         if (user.user.role?.some((role: any) => role.name === "ADMIN")) {
-            // Если пользователь администратор, загружаем список заявок
             fetchRequests();
         } else {
-            // Если пользователь не администратор, проверяем наличие его заявки
             fetchCurrentRequest();
         }
     }, []);
@@ -104,7 +100,6 @@ const AdminRequests: React.FC<{ user: User }> = (user) => {
         }
     };
 
-    // Отправка новой заявки
     const handleSubmitRequest = async () => {
         if (!newRequestDescription.trim()) {
             setErrorMessage("Описание не может быть пустым");
@@ -238,7 +233,6 @@ const AdminRequests: React.FC<{ user: User }> = (user) => {
                                                 <Stack direction="row" spacing={1}>
                                                     <Button
                                                         color="success"
-                                                        //variant="contained"
                                                         onClick={() => handleAcceptRequest(request.id)}
                                                         startIcon={<CheckIcon />}
 

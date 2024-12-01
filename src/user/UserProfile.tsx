@@ -33,7 +33,7 @@ interface User {
     surname: string;
     phoneNumber: string;
     aboutUser: string;
-    role: Role[]; // Обновлено: массив объектов ролей
+    role: Role[];
 }
 
 const UserProfile: React.FC = () => {
@@ -55,7 +55,6 @@ const UserProfile: React.FC = () => {
     const handleOpenDialog = () => setIsDialogOpen(true);
     const handleCloseDialog = () => setIsDialogOpen(false);
 
-    // Загрузка данных пользователя из sessionStorage
     useEffect(() => {
         document.title = 'Профиль';
         userData();
@@ -74,7 +73,6 @@ const UserProfile: React.FC = () => {
         }
     }
 
-    // Обновление полей редактируемого пользователя
     const handleFieldChange = (field: keyof User, value: string) => {
         if (editedUser) {
             setEditedUser({...editedUser, [field]: value});
@@ -88,7 +86,6 @@ const UserProfile: React.FC = () => {
         setConfirmPasswordVisible(!confirmPasswordVisible);
     };
 
-    // Сохранение изменений
     const handleSaveChanges = async () => {
         if (editedUser) {
             if (editedUser.phoneNumber.includes("_")) {
@@ -99,13 +96,11 @@ const UserProfile: React.FC = () => {
 
                 try {
                     await api.post("/users/profile/update", editedUser);
-                    // Если запрос успешен, сохраняем изменения
                     setUser(editedUser);
                     localStorage.setItem('user', JSON.stringify(editedUser));
                     setErrorMessage("");
                     setIsEditOpen(false);
                 } catch (error) {
-                    // Обработка ошибок запроса
                     setErrorMessage('Произошла ошибка. Пожалуйста, попробуйте снова.');
 
                 }
@@ -114,7 +109,6 @@ const UserProfile: React.FC = () => {
 
     };
 
-    // Смена пароля
     const handlePasswordChange = async () => {
         if (newPassword) {
             if (newPassword.length < 8) {
@@ -130,14 +124,12 @@ const UserProfile: React.FC = () => {
         try {
             await api.put("/profile/set-pswd", {newPassword});
 
-            // Если пароль успешно изменен
             setNewPassword('');
             setConfirmPassword('');
             setIsPasswordOpen(false);
             setErrorMessage("");
             setPasswordError("");
         } catch (error) {
-            // Обработка ошибок запроса
             setErrorMessage('Произошла ошибка при изменении пароля. Пожалуйста, попробуйте снова.');
         }
     };
@@ -161,7 +153,7 @@ const UserProfile: React.FC = () => {
             flexDirection="column"
             alignItems="center"
             p={3}
-            gap={2} // Расстояние между колонками
+            gap={2}
 
         >
             <Box p={3} display="flex" flexDirection="column" alignItems="center" gap={2} width="30vw">
@@ -391,12 +383,11 @@ const UserProfile: React.FC = () => {
             {user && user.role.length != 0 && (
                 <>
                     <Box
-                        flex={1} // Занимает две части от доступного пространства
+                        flex={1}
                         p={2}
                         width={"40vw"}
-                        //border="1px solid #ddd"
                         borderRadius="8px"
-                        alignSelf="center" // Смещает элемент вправо, если родительский Flexbox это позволяет
+                        alignSelf="center"
 
                     >
 

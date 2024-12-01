@@ -18,13 +18,11 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import api from "../api"; // Замените на свой API
-import HouseForm from "./HouseForm"; // Импорт компонента для создания дома
-import CoordinatesForm from "./CoordinatesForm"; // Импорт компонента для создания координат
+import api from "../api";
+import HouseForm from "./HouseForm";
+import CoordinatesForm from "./CoordinatesForm";
 import { useNavigate } from 'react-router-dom';
 
-
-// Типы для перечислений
 enum Furnish {
     DESIGNER = "DESIGNER",
     NONE = "NONE",
@@ -44,17 +42,16 @@ const FlatForm: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-    const [houses, setHouses] = useState<any[]>([]); // Список домов
-    const [coordinates, setCoordinates] = useState<any[]>([]); // Список координат
-    const [openHouseModal, setOpenHouseModal] = useState(false); // Для отображения формы создания дома
-    const [openCoordinatesModal, setOpenCoordinatesModal] = useState(false); // Для отображения формы создания координат
+    const [houses, setHouses] = useState<any[]>([]);
+    const [coordinates, setCoordinates] = useState<any[]>([]);
+    const [openHouseModal, setOpenHouseModal] = useState(false);
+    const [openCoordinatesModal, setOpenCoordinatesModal] = useState(false);
     const [selectedHouse, setSelectedHouse] = useState<any>(null);
     const [selectedCoordinates, setSelectedCoordinates] = useState<any>(null);
     const [errorDataMessage, setErrorDataMessage] = useState('');
 
 
     useEffect(() => {
-        // Загрузка существующих домов и координат
         const fetchData = async () => {
             try {
                 const houseResponse = await api.get("/flats/houses");
@@ -101,15 +98,14 @@ const FlatForm: React.FC = () => {
         onSubmit: async (values) => {
             setLoading(true);
 
-            // Подготовка данных для отправки
             const flatData = {
                 ...values,
-                area: parseFloat(values.area), // Преобразование в число
-                price: parseFloat(values.price), // Преобразование в число
-                timeToMetroOnFoot: parseFloat(values.timeToMetroOnFoot || "0"), // Преобразование в число
-                numberOfRooms: parseInt(values.numberOfRooms || "0", 10), // Преобразование в число
-                house: selectedHouse, // Используем выбранный дом
-                coordinates: selectedCoordinates, // Используем выбранные координаты
+                area: parseFloat(values.area),
+                price: parseFloat(values.price),
+                timeToMetroOnFoot: parseFloat(values.timeToMetroOnFoot || "0"),
+                numberOfRooms: parseInt(values.numberOfRooms || "0", 10),
+                house: selectedHouse,
+                coordinates: selectedCoordinates,
                 furnish: values.furnish || null,
             };
 
@@ -285,7 +281,7 @@ const FlatForm: React.FC = () => {
             <FormControl fullWidth>
                 <InputLabel>Стиль мебели</InputLabel>
                 <Select
-                    value={formik.values.furnish ?? null} // Отображаем null, если значение отсутствует
+                    value={formik.values.furnish ?? null}
                     onChange={(e) => {
                         const value = e.target.value === "null" ? null : e.target.value;
                         formik.setFieldValue("furnish", value);
