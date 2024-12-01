@@ -71,8 +71,8 @@ const FlatForm: React.FC = () => {
 
     const validationSchema = Yup.object({
         name: Yup.string().required("Название квартиры обязательно"),
-        area: Yup.number().positive("Площадь должна быть положительным числом").required("Площадь обязательна"),
-        price: Yup.number().positive("Цена должна быть положительным числом").required("Цена обязательна"),
+        area: Yup.number().positive("Площадь должна быть положительным числом"),
+        price: Yup.number().positive("Цена должна быть положительным числом").max(777301647, "Цена не может быть больше 777 301 647"),
         house: Yup.object().required("Дом обязателен"),
         coordinates: Yup.object().required("Координаты обязательны"),
         balcony: Yup.boolean(),

@@ -25,12 +25,14 @@ const SearchButtons: React.FC<{ onButtonClick: (field: string) => void }> = ({ o
                 <Button onClick={() => onButtonClick('house.name:')}>Дом (Название)</Button>
                 <Button onClick={() => onButtonClick('house.year:')}>Год постройки</Button>
                 <Button onClick={() => onButtonClick('house.numberOfFlatsOnFloor:')}>Квартир на этаже</Button>
+                <Button onClick={() => onButtonClick('house.ownerId:')}>ID владельца дома</Button>
             </Box>
 
             <Box flex="0 0 25%"   textAlign="center">
                 {/* Вложенные поля класса Coordinates */}
                 <Button onClick={() => onButtonClick('coordinates.x:')}>Координата X</Button>
                 <Button onClick={() => onButtonClick('coordinates.y:')}>Координата Y</Button>
+                <Button onClick={() => onButtonClick('coordinates.ownerId:')}>ID создателя координат</Button>
             </Box>
 
         </Box>
