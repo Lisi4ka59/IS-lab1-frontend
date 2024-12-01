@@ -57,18 +57,88 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean, canEditeHouse: boolean
     const [isDeleted, setIsDeleted] = useState(false);
     const [errorDataMessage, setErrorDataMessage] = useState('');
     const [errorDeletingMessage, setErrorDeletingMessage] = useState('');
+    const [errors, setErrors] = React.useState<Record<string, string>>({});
 
-
-    // Обработчик изменения полей
     const handleChange = (
         event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
+
+        // Временная переменная для отслеживания ошибки
+        let error = '';
+
+        // Валидация полей
+        switch (name) {
+            case 'name':
+                if (!value.trim()) {
+                    error = 'Поле не может быть пустым';
+                }
+                break;
+
+            case 'area':
+                if (parseFloat(value) <= 0) {
+                    error = 'Площадь должна быть больше 0';
+                }
+                break;
+
+            case 'price':
+                if (parseFloat(value) <= 0 || parseFloat(value) > 777301647) {
+                    error = 'Цена должна быть больше 0 и меньше 777301647';
+                }
+                break;
+
+            case 'timeToMetroOnFoot':
+                if (parseInt(value, 10) <= 0) {
+                    error = 'Время до метро должно быть больше 0';
+                }
+                break;
+
+            case 'numberOfRooms':
+                if (parseInt(value, 10) <= 0) {
+                    error = 'Количество комнат должно быть больше 0';
+                }
+                break;
+
+            case 'coordinates.x':
+                if (parseFloat(value) > 665 || value.trim() === '') {
+                    error = 'Координата X должна быть меньше или равна 665 и не может быть пустой';
+                }
+                break;
+
+            case 'coordinates.y':
+                if (parseFloat(value) <= -28) {
+                    error = 'Координата Y должна быть больше -28';
+                }
+                break;
+
+            case 'house.year':
+                if (parseInt(value, 10) <= 0) {
+                    error = 'Год должен быть больше 0';
+                }
+                break;
+
+            case 'house.numberOfFlatsOnFloor':
+                if (parseInt(value, 10) <= 0) {
+                    error = 'Значение поля должно быть больше 0';
+                }
+                break;
+
+            default:
+                break;
+        }
+        setErrors((prev) => ({ ...prev, [name]: error }));
+
         setEditedFlat((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+                ...prev,
+                [name.includes('.') ? name.split('.')[0] : name]: name.includes('.')
+                    ? {
+                        ...prev[name.toString().split('.')[0]],
+                        [name.split('.')[1]]: value,
+                    }
+                    : value,
+            }));
     };
+
 
     const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {name, checked} = event.target;
@@ -167,6 +237,8 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean, canEditeHouse: boolean
                                     onChange={handleChange}
                                     fullWidth
                                     margin="normal"
+                                    error={!!errors.name}
+                                    helperText={errors.name}
                                 />
                                 <TextField
                                     label="Площадь (м²)"
@@ -176,6 +248,8 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean, canEditeHouse: boolean
                                     fullWidth
                                     margin="normal"
                                     type="number"
+                                    error={!!errors.area}
+                                    helperText={errors.area}
                                 />
                                 <TextField
                                     label="Цена (₽)"
