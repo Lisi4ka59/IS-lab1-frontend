@@ -36,6 +36,7 @@ interface User {
 
 const AppMenu: React.FC = () => {
     const [anchorElOptions, setAnchorElOptions] = useState<null | HTMLElement>(null);
+    const [anchorElImport, setAnchorElImport] = useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const [user, setUser] = useState<any>(null);
     const [exit, setExit] = useState<boolean>(true);
@@ -59,6 +60,13 @@ const AppMenu: React.FC = () => {
     };
     const handleOptionsMenuClose = () => {
         setAnchorElOptions(null);
+    };
+
+    const handleImportMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorElImport(event.currentTarget);
+    };
+    const handleImportMenuClose = () => {
+        setAnchorElImport(null);
     };
 
     const hasUserRole = (user: User): boolean => {
@@ -101,9 +109,21 @@ const AppMenu: React.FC = () => {
                     <Button color="inherit" onClick={() => navigate("/flat-search")}>
                         Поиск квартиры
                     </Button>
-                    <Button color="inherit" onClick={() => navigate("/flat-import")}>
-                        Импортировать квартиры
+                    <Button color="inherit" onClick={handleImportMenuOpen}>
+                        Импорт
                     </Button>
+                    <Menu
+                        anchorEl={anchorElImport}
+                        open={Boolean(anchorElImport)}
+                        onClose={handleImportMenuClose}
+                    >
+                        <MenuItem onClick={() => navigate("/flat-import")}>
+                            Импортировать квартиры
+                        </MenuItem>
+                        <MenuItem onClick={() => navigate("/flat-import/history")}>
+                            История импорта
+                        </MenuItem>
+                    </Menu>
                     <Button color="inherit" onClick={handleOptionsMenuOpen}>
                         Дополнительные опции
                     </Button>

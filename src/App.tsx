@@ -14,6 +14,7 @@ import MostExpensiveFlatWithoutBalcony from "./advanced-flat/MostExpensiveFlatWi
 import MostExpensiveFlatFromIds from "./advanced-flat/MostExpensiveFlatFromIds.tsx";
 import FlatSearch from "./flat/FlatSearch.tsx";
 import FlatImport from "./flat/FlatImport.tsx";
+import ImportHistoryList from "./import-history/ImportHistoryList.tsx";
 
 
 const theme = createTheme({
@@ -42,6 +43,7 @@ const App: React.FC = () => {
                         <Route path="/most-expensive-flat-from-ids" element={<MostExpensiveFlatFromIds/>}/>
                         <Route path="/flat-import" element={<FlatImport/>}/>
                         <Route path="/flat-search" element={<FlatSearch/>}/>
+                        <Route path="/flat-import/history" element={<ImportHistoryList/>}/>
 
                         <Route path="*" element={<Navigate to="/"/>}/>
                     </Routes>
