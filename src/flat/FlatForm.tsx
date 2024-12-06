@@ -104,17 +104,19 @@ const FlatForm: React.FC = () => {
                 price: parseFloat(values.price),
                 timeToMetroOnFoot: parseFloat(values.timeToMetroOnFoot || "0"),
                 numberOfRooms: parseInt(values.numberOfRooms || "0", 10),
-                house: selectedHouse,
-                coordinates: selectedCoordinates,
+                houseId: selectedHouse,
+                coordinatesId: selectedCoordinates,
                 furnish: values.furnish || null,
             };
 
             try {
                 await api.post("/flats", flatData, {
+
                     headers: {
                         "Content-Type": "application/json",
                     },
                 });
+           
 
                 setSuccessMessage("Квартира успешно создана.");
                 setErrorMessage("");

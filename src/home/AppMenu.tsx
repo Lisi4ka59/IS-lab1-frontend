@@ -101,6 +101,9 @@ const AppMenu: React.FC = () => {
                     <Button color="inherit" onClick={() => navigate("/flat-search")}>
                         Поиск квартиры
                     </Button>
+                    <Button color="inherit" onClick={() => navigate("/flat-import")}>
+                        Импортировать квартиры
+                    </Button>
                     <Button color="inherit" onClick={handleOptionsMenuOpen}>
                         Дополнительные опции
                     </Button>
