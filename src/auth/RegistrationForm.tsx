@@ -78,13 +78,13 @@ const RegistrationForm: React.FC = () => {
             setPasswordError('Пароли не совпадают');
             return;
         }
-
-
-
+        const sanitizedFormData = Object.fromEntries(
+            Object.entries(formData).map(([key, value]) => [key, value.trim() === '' ? null : value])
+        );
         setLoading(true);
         setErrorMessage('');
         try {
-            await api.post('/register', formData);
+            await api.post('/register', sanitizedFormData);
             setSuccessMessage(
                 `Регистрация успешна! Мы отправили письмо для активации на адрес ${formData.email}.`
             );

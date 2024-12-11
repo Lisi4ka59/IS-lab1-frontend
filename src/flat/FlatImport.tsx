@@ -11,7 +11,6 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { useDropzone } from "react-dropzone";
 import api from "../api.ts";
 
-// Стили для области drag-and-drop
 const DropzoneContainer = styled(Box)(({ theme }) => ({
     border: `2px dashed ${theme.palette.primary.main}`,
     borderRadius: theme.shape.borderRadius,
@@ -61,13 +60,14 @@ const FlatImport: React.FC = () => {
                 headers: { "Content-Type": "multipart/form-data" },
             });
 
-            switch (response.status) {
-                case 201: {
+
                     setFile(null);
                     setMessage(`Успешно создано ${response.data?.flatsImported || 0} квартир.\nУспешно создано ${response.data?.housesImported || 0} домов.\nУспешно создано ${response.data?.coordinatesImported || 0} координат.`);
                     setErrorType("success");
-                    break;
-                }
+
+        } catch (error: any) {
+
+            switch (error.status) {
                 case 409:
                     setMessage(
                         "Квартиры не были созданы из-за ошибки сохранения в БД."
@@ -76,7 +76,7 @@ const FlatImport: React.FC = () => {
                     break;
                 case 400:
                     setMessage(
-                        `В описании квартир не прошло валидацию: ${response.data?.error || "Неизвестная ошибка."}`
+                        `Квартира не прошла валидацию: ${error.response.data?.error || "Неизвестная ошибка."}`
                     );
                     setErrorType("error");
                     break;
@@ -84,9 +84,6 @@ const FlatImport: React.FC = () => {
                     setMessage("Упс, что-то пошло не так.");
                     setErrorType("error");
             }
-        } catch (error) {
-            setMessage("Ошибка при отправке файла. Проверьте соединение с сервером.");
-            setErrorType("error");
         } finally {
             setLoading(false);
         }

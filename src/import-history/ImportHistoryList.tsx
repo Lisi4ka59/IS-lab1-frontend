@@ -80,7 +80,11 @@ const ImportHistoryList: React.FC = () => {
     }
 
     return (
+
         <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+            <Typography variant="h4" color="textSecondary">
+                История импортов
+            </Typography>
             {importHistoryList.length > 0 ? (
                 importHistoryList.map((history) => <ImportCard key={history.id} {...history} />)
             ) : (

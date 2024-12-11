@@ -460,7 +460,7 @@ const FlatCard: React.FC<{ flat: Flat; canEdite: boolean, canEditeHouse: boolean
                                     <strong>Площадь:</strong> {currentFlat.area} м²
                                 </Typography>
                                 <Typography variant="body1">
-                                    <strong>Цена:</strong> {currentFlat.price.toLocaleString()} ₽
+                                    <strong>Цена:</strong> {currentFlat.price} ₽
                                 </Typography>
                                 <Typography variant="body1">
                                     <strong>Балкон:</strong> {currentFlat.balcony ? "Есть" : "Нет"}

@@ -62,7 +62,6 @@ const AdminRequests: React.FC<{ user: User }> = (user) => {
     const [selectedRequest, setSelectedRequest] = useState<AdminRequest | null>(null);
     const [isDenyDialogOpen, setIsDenyDialogOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const [requestNotFound, setRequestNotFound] = useState(true);
     const [errorRequestMessage, setErrorRequestMessage] = useState("");
 
     useEffect(() => {
@@ -88,15 +87,8 @@ const AdminRequests: React.FC<{ user: User }> = (user) => {
         try {
             const response = await api.get("/users/admin-request");
             setCurrentRequest(response.data.adminRequest);
-            setRequestNotFound(false);
-            setErrorMessage("");
         } catch (error: any) {
-            if (error.response?.status === 404) {
                 setCurrentRequest(null);
-                setRequestNotFound(true);
-            } else {
-                setErrorMessage("Не удалось загрузить вашу заявку");
-            }
         }
     };
 
@@ -145,9 +137,6 @@ const AdminRequests: React.FC<{ user: User }> = (user) => {
     return (
         <Box>
             {!isAdmin ? (
-                !requestNotFound ? (
-
-
                         currentRequest ? (
                         <Paper elevation={2} sx={{p: 2}}>
                             <Typography variant="h6" gutterBottom>
@@ -192,16 +181,6 @@ const AdminRequests: React.FC<{ user: User }> = (user) => {
                             </Button>
                         </Box>
                         )
-
-                ) : (
-                    <Box>
-                        <Typography variant="h6" color={"error"} gutterBottom>
-                            Ошибка при загрузке вашей заявки!
-                        </Typography>
-                    </Box>
-                )
-
-
             ) : (
                 <Box alignItems={"center"}>
                     <Typography variant="h6" gutterBottom align={"center"}>

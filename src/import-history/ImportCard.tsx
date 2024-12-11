@@ -25,30 +25,32 @@ const ImportCard: React.FC<ImportHistoryProps> = ({
     const isSuccess = status === 'SUCCESS';
 
     return (
-        <Card sx={{ maxWidth: 400, margin: 2 }}>
+        <Box alignItems={"center"} maxWidth={500} minWidth={300}>
+        <Card sx={{ margin: 2, width: "100%" }}>
             <CardContent>
                 <Typography variant="h6" gutterBottom>
-                    Import History ID: {id}
+                    Импорт ID: {id}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" gutterBottom>
-                    Status: {status}
+                    Статус: {status}
                 </Typography>
                 {isSuccess && (
                     <Box sx={{ marginTop: 2 }}>
-                        <Typography variant="body2">Created Flats: {createdFlats}</Typography>
-                        <Typography variant="body2">Created Houses: {createdHouses}</Typography>
-                        <Typography variant="body2">Created Coordinates: {createdCoordinates}</Typography>
+                        <Typography variant="body2">Создано квартир: {createdFlats}</Typography>
+                        <Typography variant="body2">Создано домов: {createdHouses}</Typography>
+                        <Typography variant="body2">Создано координат: {createdCoordinates}</Typography>
                     </Box>
                 )}
                 <Typography variant="body2" sx={{ marginTop: 2 }}>
-                    Username: {username}
+                    Имя пользователя: {username}
                 </Typography>
-                <Typography variant="body2">Owner ID: {ownerId}</Typography>
+                <Typography variant="body2">ID создателя: {ownerId}</Typography>
                 <Typography variant="body2" color="textSecondary">
-                    Created At: {new Date(creationDate).toLocaleString()}
+                    Дата импорта: {new Date(creationDate).toLocaleString()}
                 </Typography>
             </CardContent>
         </Card>
+        </Box>
     );
 };
 

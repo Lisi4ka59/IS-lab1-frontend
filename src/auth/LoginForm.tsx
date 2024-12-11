@@ -45,6 +45,7 @@ const LoginForm: React.FC = () => {
             const response = await axios.post('/login', { login: formData.login, password: formData.password });
             const { token, user } = response.data;
             localStorage.setItem('token', token);
+            console.log(token);
             localStorage.setItem('user', JSON.stringify(user));
 
             if (formData.rememberMe) {

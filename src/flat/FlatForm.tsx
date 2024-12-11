@@ -96,18 +96,23 @@ const FlatForm: React.FC = () => {
         },
         validationSchema,
         onSubmit: async (values) => {
-            setLoading(true);
 
             const flatData = {
                 ...values,
-                area: parseFloat(values.area),
-                price: parseFloat(values.price),
-                timeToMetroOnFoot: parseFloat(values.timeToMetroOnFoot || "0"),
-                numberOfRooms: parseInt(values.numberOfRooms || "0", 10),
-                houseId: selectedHouse,
-                coordinatesId: selectedCoordinates,
-                furnish: values.furnish || null,
+                area: values.area?.toString().trim() === "" ? null : parseFloat(values.area), // null для пустых строк
+                price: values.price?.toString().trim() === "" ? null : parseFloat(values.price), // null для пустых строк
+                timeToMetroOnFoot: values.timeToMetroOnFoot?.toString().trim() === ""
+                    ? null
+                    : parseFloat(values.timeToMetroOnFoot), // null для пустых строк
+                numberOfRooms: values.numberOfRooms?.toString().trim() === ""
+                    ? null
+                    : parseInt(values.numberOfRooms, 10), // null для пустых строк
+                houseId: selectedHouse || null, // null для отсутствующего значения
+                coordinatesId: selectedCoordinates || null, // null для отсутствующего значения
+                furnish: values.furnish?.toString().trim() === "" ? null : values.furnish, // null для пустых строк
             };
+
+            console.log("Отправляемые данные:", flatData);
 
             try {
                 await api.post("/flats", flatData, {
@@ -116,7 +121,7 @@ const FlatForm: React.FC = () => {
                         "Content-Type": "application/json",
                     },
                 });
-           
+
 
                 setSuccessMessage("Квартира успешно создана.");
                 setErrorMessage("");
@@ -130,8 +135,6 @@ const FlatForm: React.FC = () => {
             }
         },
     });
-
-
 
     const handleOpenHouseModal = () => {
         setOpenHouseModal(true);
