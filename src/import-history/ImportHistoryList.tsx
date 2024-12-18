@@ -12,6 +12,7 @@ interface ImportHistory {
     username: string;
     ownerId: number;
     creationDate: string;
+    filePath: string;
 }
 interface User {
     id: number;
