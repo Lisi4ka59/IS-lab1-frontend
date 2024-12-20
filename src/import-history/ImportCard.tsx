@@ -1,7 +1,7 @@
-import React from 'react';
-import { Card, CardContent, Typography, Box } from '@mui/material';
-import api from "../api"
-import {FileDownloadOutlined} from "@mui/icons-material";
+import React, { useState } from 'react';
+import { Card, CardContent, Typography, Box, Snackbar, Alert } from '@mui/material';
+import { FileDownloadOutlined } from '@mui/icons-material';
+import api from '../api';
 
 interface ImportHistoryProps {
     id: number;
@@ -26,16 +26,23 @@ const ImportCard: React.FC<ImportHistoryProps> = ({
                                                       creationDate,
                                                       filePath,
                                                   }) => {
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState<'error' | 'success' | 'info'>('error');
+
     const isSuccess = status === 'SUCCESS';
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+    };
 
     const handleDownload = async () => {
         try {
             const response = await api.get(`/flats/download`, {
                 params: { filePath },
-                responseType: 'blob', // Ensures the response is treated as a binary file
+                responseType: 'blob',
             });
 
-            // Create a link element to trigger the download
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
@@ -43,14 +50,29 @@ const ImportCard: React.FC<ImportHistoryProps> = ({
             document.body.appendChild(link);
             link.click();
             link.remove();
-        } catch (error) {
-            console.error('Error downloading the file:', error);
+            setSnackbarMessage('Файл успешно загружен!');
+            setSnackbarSeverity('success');
+            setSnackbarOpen(true);
+        } catch (error: any) {
+            if (error.response) {
+                if (error.response.status === 404) {
+                    setSnackbarMessage('Файл не найден в хранилище.');
+                } else if (error.response.status === 500) {
+                    setSnackbarMessage('Ошибка: файловое хранилище недоступно.');
+                } else {
+                    setSnackbarMessage(`Произошла ошибка: ${error.response.statusText}`);
+                }
+            } else {
+                setSnackbarMessage('Произошла ошибка при загрузке файла.');
+            }
+            setSnackbarSeverity('error');
+            setSnackbarOpen(true);
         }
     };
 
     return (
-        <Box alignItems={"center"} maxWidth={500} minWidth={300}>
-            <Card sx={{ margin: 2, width: "100%" }}>
+        <Box alignItems="center" maxWidth={500} minWidth={300}>
+            <Card sx={{ margin: 2, width: '100%' }}>
                 <CardContent>
                     <Typography variant="h6" gutterBottom>
                         Импорт ID: {id}
@@ -73,7 +95,6 @@ const ImportCard: React.FC<ImportHistoryProps> = ({
                         Дата импорта: {new Date(creationDate).toLocaleString()}
                     </Typography>
 
-                    {/* New section for file download */}
                     {filePath && (
                         <Box
                             sx={{
@@ -93,6 +114,17 @@ const ImportCard: React.FC<ImportHistoryProps> = ({
                     )}
                 </CardContent>
             </Card>
+
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            >
+                <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };
